@@ -9,7 +9,7 @@ async function initializeDatabase() {
     filename: "./database/database.sqlite",
     driver: sqlite3.Database,
   });
-  connection.on("trace", (sql) => console.log(sql));
+  connection.on("trace", (sql) => console.log(sql)); // loguje dotazy sql, muzeme vypnout
   await connection.migrate();
 }
 
