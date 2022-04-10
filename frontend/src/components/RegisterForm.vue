@@ -29,6 +29,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import axios from "axios";
+import config from "../../config";
 
 export default defineComponent({
   name: "RegisterForm",
@@ -45,9 +47,19 @@ export default defineComponent({
     };
   },
   methods: {
-    registerUser(event: SubmitEvent) {
+    async registerUser(event: SubmitEvent) {
       event.preventDefault();
-      console.log(this.user);
+
+      try {
+        const response = await axios.post(
+          config.backendUrl + "/users/register",
+          this.user
+        );
+        const { data } = response;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });

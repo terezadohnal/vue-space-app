@@ -9,23 +9,16 @@ router.get("/", (req, res) => {
 router.post("/register", async (req, res) => {
   const data = req.body;
 
-  if (
-    data.username === undefined ||
-    data.title?.trim() === "" ||
-    data.password === undefined ||
-    data.text?.trim() === ""
-  ) {
-    res.status(400).send("Bad input");
-    return;
-  }
+  console.log(data);
 
-  const hash = userService.hashPassword(data.password);
-  const user = await userService.register(data, hash);
+  // const hash = userService.hashPassword(data.password);
+  // const user = await userService.register(data, hash);
 
   const response = {
     message: "User registered",
     user: {
-      id: user.lastID,
+      // id: user.lastID,
+      id: 1,
     },
   };
 
