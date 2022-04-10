@@ -15,10 +15,10 @@ class UserService {
     return await database().all("SELECT * FROM users");
   }
 
-  async getByUsername(username) {
+  async getByNickname(nickname) {
     return await database().get(
-      "SELECT * FROM users WHERE username = ?",
-      username
+      "SELECT * FROM users WHERE nickname = ?",
+      nickname
     );
   }
 
@@ -32,13 +32,13 @@ class UserService {
       password,
       USER_ROLES.CUSTOMER
     );
-    console.log(result);
+    // console.log(result);
     return result;
   }
 
   async generateToken(user) {
     const tokenPayload = {
-      username: user.username,
+      nickname: user.nickname,
       role: user.role,
     };
     return jwt.sign(tokenPayload, jwtConfig.secret, {
@@ -56,6 +56,24 @@ class UserService {
         passwordConfig.digest
       )
       .toString(`hex`);
+  }
+
+  validate() {
+    if (
+      data.firstname === undefined ||
+      data.firstname?.trim() === "" ||
+      data.lastname === undefined ||
+      data.lastname?.trim() === "" ||
+      data.nickname === undefined ||
+      data.nickname?.trim() === "" ||
+      data.password === undefined ||
+      data.password?.trim() === "" ||
+      data.password.length > 8 ||
+      data.password !== data.passwordConf
+    ) {
+      return false;
+    }
+    return true;
   }
 }
 

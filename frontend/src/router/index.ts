@@ -4,6 +4,7 @@ import FlightsView from "../views/FlightsView.vue";
 import FlightDetailView from "../views/FlightDetailView.vue";
 import UserView from "../views/UserView.vue";
 import RegisterUserView from "../views/RegisterUserView.vue";
+import LoginView from "../views/LoginView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: "/register",
       name: "register",
       component: RegisterUserView,
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
     },
   ],
 });

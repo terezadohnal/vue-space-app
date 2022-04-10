@@ -11,6 +11,10 @@ router.post("/register", async (req, res) => {
 
   //TODO - validace dat, porovnani hesel -> v user-service funkce validate() => true/false
 
+  if (!validate(data)) {
+    return res.status(400).send("Bad input");
+  }
+
   const hash = userService.hashPassword(data.password);
   const user = await userService.register(data, hash);
 
@@ -28,17 +32,17 @@ router.post("/login", async (req, res) => {
   const data = req.body;
 
   if (
-    data.username === undefined ||
-    data.title?.trim() === "" ||
+    data.nickname === undefined ||
+    data.nickname?.trim() === "" ||
     data.password === undefined ||
-    data.text?.trim() === ""
+    data.password?.trim() === ""
   ) {
     res.status(400).send("Bad input");
     return;
   }
 
   const hash = userService.hashPassword(data.password);
-  const user = await userService.getByUsername(data.username);
+  const user = await userService.getByNickname(data.nickname);
 
   if (!user) {
     return res.status(404).send("Not found");
@@ -49,7 +53,8 @@ router.post("/login", async (req, res) => {
   }
 
   const response = {
-    token: await userService.generateToken(user.username),
+    message: "User logged in",
+    token: await userService.generateToken(user.nickname),
   };
 
   res.status(201).send(response);
