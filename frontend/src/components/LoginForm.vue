@@ -37,7 +37,7 @@ export default defineComponent({
           this.user
         );
         const { data } = response;
-        console.log(data);
+
         this.resetForm();
       } catch (error) {
         console.log(error);
