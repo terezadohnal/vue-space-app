@@ -9,16 +9,15 @@ router.get("/", (req, res) => {
 router.post("/register", async (req, res) => {
   const data = req.body;
 
-  console.log(data);
+  //TODO - validace dat, porovnani hesel -> v user-service funkce validate() => true/false
 
-  // const hash = userService.hashPassword(data.password);
-  // const user = await userService.register(data, hash);
+  const hash = userService.hashPassword(data.password);
+  const user = await userService.register(data, hash);
 
   const response = {
     message: "User registered",
     user: {
-      // id: user.lastID,
-      id: 1,
+      id: user.lastID,
     },
   };
 

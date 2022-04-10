@@ -3,6 +3,13 @@ const { passwordConfig, jwtConfig } = require("../config");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 
+const USER_ROLES = {
+  CUSTOMER: "customer",
+  SECRETARY: "secretary",
+  TECHNICIAN: "technician",
+  ADMIN: "admin",
+};
+
 class UserService {
   async getAll() {
     return await database().all("SELECT * FROM users");
@@ -17,10 +24,13 @@ class UserService {
 
   async register(user, password) {
     const result = await database().run(
-      "INSERT INTO  users (username, password, role) VALUES (?, ?, ?)",
-      user.username,
+      "INSERT INTO  users (firstname, lastname, nickname, email, password, role) VALUES (?, ?, ?, ?, ?, ?)",
+      user.firstname,
+      user.lastname,
+      user.nickname,
+      user.email,
       password,
-      user.role
+      USER_ROLES.CUSTOMER
     );
     console.log(result);
     return result;
