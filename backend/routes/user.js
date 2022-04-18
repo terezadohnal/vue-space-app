@@ -11,9 +11,9 @@ router.post("/register", async (req, res) => {
 
   //TODO - validace dat, porovnani hesel -> v user-service funkce validate() => true/false
 
-  if (!validate(data)) {
-    return res.status(400).send("Bad input");
-  }
+  // if (!userService.validate(data)) {
+  //   return res.status(400).send("Bad input");
+  // }
 
   const hash = userService.hashPassword(data.password);
   const user = await userService.register(data, hash);

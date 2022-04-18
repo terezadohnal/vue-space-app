@@ -3,7 +3,7 @@
     <h1>Flights</h1>
     <p>List Of Flights</p>
     <ul>
-      <li :key="flight.id" v-for="flight in flights">
+      <li :key="flight.id" v-for="flight of flights">
         <router-link :to="{ name: 'flight-detail', params: { id: flight.id } }"
           >{{ flight.name }}
         </router-link>
@@ -16,7 +16,6 @@
 export default {
   data() {
     return {
-      name: "flights",
       flights: [
         {
           id: 1,
@@ -33,6 +32,7 @@ export default {
           destination: "Moon",
         },
         {
+          id: 3,
           name: "SX60433",
           aircraft: "Falcon 9",
           departure: "2021-12-13 07:00:00",

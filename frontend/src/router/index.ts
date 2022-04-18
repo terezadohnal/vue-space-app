@@ -15,14 +15,14 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/flights",
-      name: "flights",
-      component: FlightsView,
-    },
-    {
       path: "/flights/:id",
       name: "flight-detail",
       component: FlightDetailView,
+    },
+    {
+      path: "/flights",
+      name: "flights",
+      component: FlightsView,
     },
     {
       path: "/",

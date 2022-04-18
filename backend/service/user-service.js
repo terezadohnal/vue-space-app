@@ -58,7 +58,7 @@ class UserService {
       .toString(`hex`);
   }
 
-  validate() {
+  validate(data) {
     if (
       data.firstname === undefined ||
       data.firstname?.trim() === "" ||
