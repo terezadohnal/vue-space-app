@@ -18,9 +18,10 @@
         required
       />
       <br />
-      <div class="submit-button">
-        <button type="submit">Submit</button>
-      </div>
+      <!-- <div class="submit-button">
+        <button>Submit</button>
+      </div> -->
+      <SubmitButton type="submit" text="Submit" />
     </form>
   </div>
 </template>
@@ -30,9 +31,10 @@ import { defineComponent } from "vue";
 import axios from "axios";
 import config from "../../config";
 import Input from "../components/esentials/Input.vue";
+import SubmitButton from "../components/esentials/SubmitButton.vue";
 
 export default defineComponent({
-  components: { Input },
+  components: { Input, SubmitButton },
   name: "LoginForm",
   data() {
     return {
@@ -50,7 +52,6 @@ export default defineComponent({
 
     setPassword(event: Event) {
       const target = <HTMLInputElement>event.target;
-      console.log(target.value);
       this.user.password = target.value;
     },
 
@@ -85,49 +86,5 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   margin: 5px;
-}
-
-.submit-button {
-  display: flex;
-  justify-content: center;
-  margin: 15px;
-}
-
-button {
-  font-size: 16px;
-  font-weight: 200;
-  letter-spacing: 1px;
-  padding: 13px 20px 13px;
-  outline: 0;
-  border: 1px solid black;
-  cursor: pointer;
-  position: relative;
-  background-color: rgba(0, 0, 0, 0);
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-button:after {
-  content: "";
-  background-color: #ffe54c;
-  width: 100%;
-  z-index: -1;
-  position: absolute;
-  height: 100%;
-  top: 7px;
-  left: 7px;
-  transition: 0.2s;
-}
-
-button:hover:after {
-  top: 0px;
-  left: 0px;
-}
-
-@media (min-width: 768px) {
-  button {
-    padding: 13px 50px 13px;
-  }
 }
 </style>

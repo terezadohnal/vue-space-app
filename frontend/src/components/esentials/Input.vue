@@ -1,8 +1,4 @@
 <template>
-  <!-- <div class="error">
-    {{ this.text }}
-    <button @click="$emit('hide')">Hide</button>
-  </div> -->
   <div class="input">
     <label for="name">{{ label }}</label>
     <input
