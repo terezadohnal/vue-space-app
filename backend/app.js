@@ -6,6 +6,7 @@ const userRouter = require("./routes/user");
 const flightRouter = require("./routes/flight");
 const cors = require("cors");
 const config = require("./config");
+const jwt = require("express-jwt");
 
 initializeDatabase();
 
@@ -15,6 +16,9 @@ app.use(
     origin: config.allowedFEOrigin,
   })
 );
+
+app.use("/flight", jwt(jwtConfig)); // middleware
+// app.use("/user/info", jwt(jwtConfig));
 
 app.use("/", homepageRouter);
 app.use("/users", userRouter);

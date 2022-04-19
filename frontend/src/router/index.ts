@@ -5,6 +5,8 @@ import FlightDetailView from "../views/FlightDetailView.vue";
 import UserView from "../views/UserView.vue";
 import RegisterUserView from "../views/RegisterUserView.vue";
 import LoginView from "../views/LoginView.vue";
+import AuthSection from "../AuthSection.vue";
+import { useUserStore } from "../stores/UserStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,21 +15,6 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomeView,
-    },
-    {
-      path: "/flights/:id",
-      name: "flight-detail",
-      component: FlightDetailView,
-    },
-    {
-      path: "/flights",
-      name: "flights",
-      component: FlightsView,
-    },
-    {
-      path: "/",
-      name: "user",
-      component: UserView,
     },
     {
       path: "/register",
@@ -39,7 +26,39 @@ const router = createRouter({
       name: "login",
       component: LoginView,
     },
+    {
+      path: "/auth",
+      name: "auth",
+      component: AuthSection,
+      beforeEnter: checkAuthentication,
+      children: [
+        {
+          path: "/flights",
+          name: "flights",
+          component: FlightsView,
+        },
+        {
+          path: "/flights/:id",
+          name: "flight-detail",
+          component: FlightDetailView,
+        },
+        {
+          path: "/",
+          name: "user",
+          component: UserView,
+        },
+      ],
+    },
   ],
 });
 
+function checkAuthentication(to, from, next) {
+  const store = useUserStore();
+  if (store.isAuthenticated) {
+    next();
+    store.setLoginMessage("To access articles you must log in.");
+    store.setAfterLoginRoute(to);
+    next({ name: "login" });
+  }
+}
 export default router;

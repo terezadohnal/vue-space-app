@@ -1,39 +1,73 @@
 <template>
-  <form @submit="registerUser">
-    <label for="firstname">Firstname</label>
-    <input type="text" v-model="user.firstname" id="firstname" required />
-    <br />
-    <label for="lastname">Lastname</label>
-    <input type="text" v-model="user.lastname" id="lastname" required />
-    <br />
-    <label for="nickname">Nickname</label>
-    <input type="text" v-model="user.nickname" id="nickname" required />
-    <br />
-    <label for="email">E-mail</label>
-    <input type="email" v-model="user.email" id="email" />
-    <br />
-    <label for="password">Password</label>
-    <input type="password" v-model="user.password" id="password" required />
-    <br />
-    <label for="passwordConf">Password confirmation</label>
-    <input
-      type="password"
-      v-model="user.passwordConf"
-      id="passwordConf"
-      required
-    />
-    <br />
-    <button type="submit">Submit</button>
-  </form>
+  <div class="form">
+    <form @submit="registerUser">
+      <Input
+        label="First name"
+        type="text"
+        :value="user.firstname"
+        @input="setFirstname"
+        @change="setFirstname"
+        required
+      />
+      <Input
+        label="Last name"
+        type="text"
+        :value="user.lastname"
+        @input="setLastname"
+        @change="setLastname"
+        required
+      />
+      <Input
+        label="Nickname"
+        type="text"
+        :value="user.nickname"
+        @input="setNickname"
+        @change="setNickname"
+        required
+      />
+      <Input
+        label="E-mail"
+        type="text"
+        :value="user.email"
+        @input="setEmail"
+        @change="setEmail"
+        required
+      />
+      <Input
+        label="Password"
+        type="password"
+        :value="user.password"
+        @input="setPassword"
+        @change="setPassword"
+        required
+      />
+      <Input
+        label="Password confirmation"
+        type="password"
+        :value="user.passwordConf"
+        @input="setPasswordConf"
+        @change="setPasswordConf"
+        required
+      />
+
+      <br />
+      <SubmitButton type="submit" text="Register" />
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import Input from "../components/esentials/Input.vue";
+import SubmitButton from "../components/esentials/SubmitButton.vue";
+import { useUserStore } from "../stores/UserStore";
+import { mapStores } from "pinia/dist/pinia";
 import axios from "axios";
 import config from "../../config";
 
 export default defineComponent({
   name: "RegisterForm",
+  components: { Input, SubmitButton },
   data() {
     return {
       user: {
@@ -46,17 +80,41 @@ export default defineComponent({
       },
     };
   },
+  computed: {
+    ...mapStores(useUserStore),
+  },
   methods: {
+    setFirstname(event: Event) {
+      const target = <HTMLInputElement>event.target;
+      this.user.firstname = target.value;
+    },
+    setLastname(event: Event) {
+      const target = <HTMLInputElement>event.target;
+      this.user.lastname = target.value;
+    },
+    setNickname(event: Event) {
+      const target = <HTMLInputElement>event.target;
+      this.user.nickname = target.value;
+    },
+    setEmail(event: Event) {
+      const target = <HTMLInputElement>event.target;
+      this.user.email = target.value;
+    },
+    setPassword(event: Event) {
+      const target = <HTMLInputElement>event.target;
+      this.user.password = target.value;
+    },
+    setPasswordConf(event: Event) {
+      const target = <HTMLInputElement>event.target;
+      this.user.passwordConf = target.value;
+    },
     async registerUser(event: SubmitEvent) {
       event.preventDefault();
-
       try {
-        const response = await axios.post(
-          config.backendUrl + "/users/register",
-          this.user
-        );
-        const { data } = response;
-        console.log(data);
+        this.userStore.register(this.user);
+        if (!this.userStore.error) {
+          this.$router.push({ name: "login" });
+        }
         this.resetForm();
       } catch (error) {
         console.log(error);
@@ -74,3 +132,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.form {
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+}
+</style>

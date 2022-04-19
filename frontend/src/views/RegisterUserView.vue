@@ -1,6 +1,10 @@
 <template>
-  <div>Register User View</div>
-  <RegisterForm />
+  <div class="content">
+    <div class="headline">
+      <h1>Registration</h1>
+    </div>
+    <RegisterForm />
+  </div>
 </template>
 
 <script lang="ts">
@@ -12,3 +16,23 @@ export default defineComponent({
   name: "RegisterUserView",
 });
 </script>
+
+<style scoped>
+.headline {
+  display: flex;
+  justify-content: center;
+  padding: 2em;
+}
+
+h1 {
+  font-size: 3em;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2em;
+}
+</style>

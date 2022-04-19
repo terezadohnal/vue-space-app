@@ -18,9 +18,6 @@
         required
       />
       <br />
-      <!-- <div class="submit-button">
-        <button>Submit</button>
-      </div> -->
       <SubmitButton type="submit" text="Submit" />
     </form>
   </div>
@@ -32,10 +29,12 @@ import axios from "axios";
 import config from "../../config";
 import Input from "../components/esentials/Input.vue";
 import SubmitButton from "../components/esentials/SubmitButton.vue";
+import { useUserStore } from "../stores/UserStore";
+import { mapStores } from "pinia/dist/pinia";
 
 export default defineComponent({
-  components: { Input, SubmitButton },
   name: "LoginForm",
+  components: { Input, SubmitButton },
   data() {
     return {
       user: {
@@ -43,6 +42,9 @@ export default defineComponent({
         password: "",
       },
     };
+  },
+  computed: {
+    ...mapStores(useUserStore),
   },
   methods: {
     setName(event: Event) {
@@ -57,15 +59,12 @@ export default defineComponent({
 
     async loginUser(event: SubmitEvent) {
       event.preventDefault();
-
-      console.log("user:", this.user);
-
       try {
-        const response = await axios.post(
-          config.backendUrl + "/users/login",
-          this.user
-        );
-        const { data } = response;
+        await this.userStore.login(this.user.nickname, this.user.password);
+        if (!this.userStore.error) {
+          this.$router.push(this.userStore.afterLoginRoute ?? { name: "home" });
+        }
+        this.userStore.setAfterLoginRoute(null);
 
         this.resetForm();
       } catch (error) {
