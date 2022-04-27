@@ -25,8 +25,6 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import axios from "axios";
-import config from "../../config";
 import Input from "../components/esentials/Input.vue";
 import SubmitButton from "../components/esentials/SubmitButton.vue";
 import { useUserStore } from "../stores/UserStore";

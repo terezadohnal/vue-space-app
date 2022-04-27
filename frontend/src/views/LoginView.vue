@@ -1,8 +1,7 @@
 <template>
   <div class="content">
-    <div class="headline">
-      <h1>Login</h1>
-    </div>
+    <Warning v-if="userStore.loginMessage" :text="userStore.loginMessage" />
+    <Headline :text="this.text" />
     <LoginForm />
   </div>
 </template>
@@ -10,29 +9,30 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import LoginForm from "@/components/LoginForm.vue";
+import { useUserStore } from "../stores/UserStore";
+import { mapStores } from "pinia/dist/pinia";
+import Warning from "../components/esentials/Warning.vue";
+import Headline from "../components/esentials/Headline.vue";
 
 export default defineComponent({
-  components: { LoginForm },
+  components: { LoginForm, Warning, Headline },
   name: "LoginView",
+  data() {
+    return {
+      text: "Login",
+    };
+  },
+  computed: {
+    ...mapStores(useUserStore),
+  },
 });
 </script>
 
 <style scoped>
-.headline {
-  display: flex;
-  justify-content: center;
-  padding: 2em;
-}
-
-h1 {
-  font-size: 3em;
-  text-transform: uppercase;
-  letter-spacing: 0.5em;
-}
-
 .content {
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding-top: 5em;
 }
 </style>

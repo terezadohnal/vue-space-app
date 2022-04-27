@@ -1,8 +1,6 @@
 <template>
   <div class="content">
-    <div class="headline">
-      <h1>Registration</h1>
-    </div>
+    <Headline :text="this.text" />
     <RegisterForm />
   </div>
 </template>
@@ -10,10 +8,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import RegisterForm from "@/components/RegisterForm.vue";
+import Headline from "../components/esentials/Headline.vue";
 
 export default defineComponent({
-  components: { RegisterForm },
+  components: { RegisterForm, Headline },
   name: "RegisterUserView",
+  data() {
+    return {
+      text: "Registration",
+    };
+  },
 });
 </script>
 

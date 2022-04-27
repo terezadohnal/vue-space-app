@@ -7,6 +7,17 @@ router.get("/", async (req, res) => {
   res.json(flights);
 });
 
+router.get("/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  const flight = await flightService.getById(id);
+
+  if (flight) {
+    res.json(flight);
+  } else {
+    res.status(404).send("Not found");
+  }
+});
+
 router.post("/", async (req, res) => {
   // nemusime uvadet /create
   const data = req.body;

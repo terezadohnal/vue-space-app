@@ -9,12 +9,6 @@ router.get("/", (req, res) => {
 router.post("/register", async (req, res) => {
   const data = req.body;
 
-  //TODO - validace dat, porovnani hesel -> v user-service funkce validate() => true/false
-
-  // if (!userService.validate(data)) {
-  //   return res.status(400).send("Bad input");
-  // }
-
   const hash = userService.hashPassword(data.password);
   const user = await userService.register(data, hash);
 
@@ -55,6 +49,14 @@ router.post("/login", async (req, res) => {
   const response = {
     message: "User logged in",
     token: await userService.generateToken(user.nickname),
+    user: {
+      id: user.id,
+      nickname: user.nickname,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      role: user.role,
+      email: user.email,
+    },
   };
 
   res.status(201).send(response);

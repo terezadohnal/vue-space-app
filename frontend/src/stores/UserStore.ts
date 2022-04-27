@@ -4,18 +4,42 @@ import config from "../../config";
 import jwtDecode from "jwt-decode";
 
 export const useUserStore = defineStore("user", {
-  state: () => ({
-    token: null,
-    isLoggingIn: false,
-    isRegistering: false,
-    error: null,
-    loginMessage: null,
-    afterLoginRoute: null,
-  }),
+  state() {
+    const oldToken = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    if (oldToken) {
+      axios.defaults.headers.common["Authorization"] = "Bearer " + oldToken;
+    }
+    return {
+      token: oldToken,
+      isLoggingIn: false,
+      isRegistering: false,
+      error: null,
+      loginMessage: null,
+      afterLoginRoute: null,
+      id: userData?.id || null,
+      nickname: userData?.nickname || null,
+      firstname: userData?.firstname || null,
+      lastname: userData?.lastname || null,
+      role: userData?.role || null,
+      email: userData?.email || null,
+    };
+  },
 
   getters: {
     isAuthenticated: (state) => state.token !== null,
-    user: (state) => jwtDecode(state.token),
+    decodedToken: (state) => jwtDecode(state.token),
+    error: (state) => state.error,
+    afterLoginRoute: (state) => state.afterLoginRoute,
+    user: (state) => ({
+      id: state.id,
+      nickname: state.nickname,
+      firstname: state.firstname,
+      lastname: state.lastname,
+      role: state.role,
+      email: state.email,
+    }),
   },
 
   actions: {
@@ -27,9 +51,21 @@ export const useUserStore = defineStore("user", {
           config.backendUrl + "/users/login",
           data
         );
-        this.token = response.data.token;
-        axios.defaults.headers.common["Authorization"] = "Bearer" + this.token; // globalne do celeho axiosu to prida token
-        this.error = null;
+
+        console.log(response);
+
+        const { token, user } = response.data;
+
+        this.token = token;
+        this.id = user.id;
+        this.nickname = user.nickname;
+        this.firstname = user.firstname;
+        this.lastname = user.lastname;
+        this.role = user.role;
+        this.email = user.email;
+        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
         this.isLoggingIn = false;
       } catch (e) {
         console.error(e);
@@ -64,6 +100,7 @@ export const useUserStore = defineStore("user", {
     logout() {
       this.token = null;
       delete axios.defaults.headers.common["Authorization"];
+      localStorage.removeItem("token");
     },
 
     clearError() {

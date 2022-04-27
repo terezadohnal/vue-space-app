@@ -32,7 +32,6 @@ class UserService {
       password,
       USER_ROLES.CUSTOMER
     );
-    // console.log(result);
     return result;
   }
 

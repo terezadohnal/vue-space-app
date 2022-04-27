@@ -7,8 +7,11 @@ class FlightService {
   }
 
   async getById(id) {
-    const result = await database().all("SELECT * FROM users WHERE id = ?", id);
-    return result;
+    const result = await database().all(
+      "SELECT * FROM flights WHERE id = ?",
+      id
+    );
+    return await result;
   }
 
   async create(data) {
@@ -19,9 +22,8 @@ class FlightService {
       data.departure,
       data.destination
     );
-    console.log(result);
-    result.lastID;
-    return this.getById(result.lastID);
+
+    return await this.getById(result.lastID);
   }
 }
 

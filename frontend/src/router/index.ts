@@ -56,7 +56,8 @@ function checkAuthentication(to, from, next) {
   const store = useUserStore();
   if (store.isAuthenticated) {
     next();
-    store.setLoginMessage("To access articles you must log in.");
+  } else {
+    store.setLoginMessage("To access this page you must log in first.");
     store.setAfterLoginRoute(to);
     next({ name: "login" });
   }
