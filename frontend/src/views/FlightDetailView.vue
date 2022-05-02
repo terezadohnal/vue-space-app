@@ -3,10 +3,13 @@
   <div class="content">
     <div class="info">
       <h3>INFO</h3>
-      <p>{{ this.flight.name }}</p>
-      <p>{{ this.flight.aircraft }}</p>
-      <p>{{ this.flight.departure }}</p>
-      <p>{{ this.flight.destination }}</p>
+      <p>NAME OF FLIGHT: {{ this.flight.name }}</p>
+      <p>AIRCRAFT: {{ this.flight.aircraft }}</p>
+      <p>COMPANY: {{ this.flight.company }}</p>
+      <p>DATE: {{ this.flight.date }}</p>
+      <p>DEPARTURE: {{ this.flight.departure }}</p>
+      <p>DESTINATION: {{ this.flight.destination }}</p>
+      <p>NUM. OF SEATS: {{ this.flight.seats }}</p>
     </div>
     <div class="actions">
       <h3>ACTIONS</h3>
@@ -28,7 +31,7 @@ export default {
   components: { Headline, ActionButton },
   data() {
     return {
-      text: `Flight no. ${this.id}`,
+      text: `Flight Detail`,
     };
   },
   created() {

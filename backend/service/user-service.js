@@ -22,6 +22,10 @@ class UserService {
     );
   }
 
+  async getById(id) {
+    return await database().get("SELECT * FROM users WHERE user_id = ?", id);
+  }
+
   async register(user, password) {
     const result = await database().run(
       "INSERT INTO  users (firstname, lastname, nickname, email, password, role) VALUES (?, ?, ?, ?, ?, ?)",

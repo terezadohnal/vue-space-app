@@ -7,7 +7,9 @@
     <div v-else-if="flightStore.flights.length === 0">No flights.</div>
     <div class="flight-dashboard" v-else>
       <div class="card" :key="flight.id" v-for="flight in flightStore.flights">
-        <router-link :to="{ name: 'flight-detail', params: { id: flight.id } }">
+        <router-link
+          :to="{ name: 'flight-detail', params: { id: flight.flight_id } }"
+        >
           <div class="link">
             <h3>Flight {{ flight.name }}</h3>
             <p>Departure at: {{ flight.departure }}</p>

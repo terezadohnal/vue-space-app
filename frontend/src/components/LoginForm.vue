@@ -59,6 +59,7 @@ export default defineComponent({
       event.preventDefault();
       try {
         await this.userStore.login(this.user.nickname, this.user.password);
+
         if (!this.userStore.error) {
           this.$router.push(this.userStore.afterLoginRoute ?? { name: "home" });
         }

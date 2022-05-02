@@ -12,7 +12,7 @@ export const useFlightStore = defineStore("flight", {
 
   getters: {
     getById: (state) => (id) =>
-      state.flights.find((flight) => flight.id === id),
+      state.flights.find((flight) => flight.flight_id === id),
   },
 
   actions: {
@@ -39,7 +39,7 @@ export const useFlightStore = defineStore("flight", {
       }
     },
     addOrUpdateInStore(id, flight) {
-      const index = this.flights.findIndex((a) => a.id === id);
+      const index = this.flights.findIndex((a) => a.flight_id === id);
       if (index !== -1) {
         this.flights[index] = flight;
       } else {

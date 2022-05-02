@@ -8,7 +8,7 @@ class FlightService {
 
   async getById(id) {
     const result = await database().all(
-      "SELECT * FROM flights WHERE id = ?",
+      "SELECT * FROM flights WHERE flight_id = ?",
       id
     );
     return await result;
@@ -16,11 +16,14 @@ class FlightService {
 
   async create(data) {
     const result = await database().run(
-      "INSERT INTO flights (name, aircraft, departure, destination) VALUES (?, ?, ?, ?)",
+      "INSERT INTO flights (name, aircraft, company, date, departure, destination, seats) VALUES (?, ?, ?, ?, ?, ?, ?)",
       data.name,
       data.aircraft,
+      data.company,
+      data.date,
       data.departure,
-      data.destination
+      data.destination,
+      data.seats
     );
 
     return await this.getById(result.lastID);

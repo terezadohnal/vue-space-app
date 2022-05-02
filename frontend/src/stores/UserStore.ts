@@ -6,7 +6,15 @@ import jwtDecode from "jwt-decode";
 export const useUserStore = defineStore("user", {
   state() {
     const oldToken = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
+    // const userData = localStorage.getItem("user");
+    const userData = {
+      id: "",
+      nickname: "",
+      firstname: "",
+      lastname: "",
+      role: "",
+      email: "",
+    };
 
     if (oldToken) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + oldToken;
@@ -18,28 +26,16 @@ export const useUserStore = defineStore("user", {
       error: null,
       loginMessage: null,
       afterLoginRoute: null,
-      id: userData?.id || null,
-      nickname: userData?.nickname || null,
-      firstname: userData?.firstname || null,
-      lastname: userData?.lastname || null,
-      role: userData?.role || null,
-      email: userData?.email || null,
+      user: null,
     };
   },
 
   getters: {
     isAuthenticated: (state) => state.token !== null,
-    decodedToken: (state) => jwtDecode(state.token),
+    user: (state) => jwtDecode(state.token),
     error: (state) => state.error,
     afterLoginRoute: (state) => state.afterLoginRoute,
-    user: (state) => ({
-      id: state.id,
-      nickname: state.nickname,
-      firstname: state.firstname,
-      lastname: state.lastname,
-      role: state.role,
-      email: state.email,
-    }),
+    // getUser: (state) => state.user,
   },
 
   actions: {
@@ -52,24 +48,37 @@ export const useUserStore = defineStore("user", {
           data
         );
 
-        console.log(response);
-
         const { token, user } = response.data;
 
         this.token = token;
-        this.id = user.id;
-        this.nickname = user.nickname;
-        this.firstname = user.firstname;
-        this.lastname = user.lastname;
-        this.role = user.role;
-        this.email = user.email;
+        const userId = user.id;
+
+        const userData = await this.getById(userId);
+
+        this.user = userData;
+        console.log(user);
+        // this.user.id = userData.id;
+        // this.user.nickname = userData.nickname;
+        // this.user.firstname = userData.firstname;
+        // this.user.lastname = userData.lastname;
+        // this.user.role = userData.role;
+        // this.user.email = userData.email;
+
         axios.defaults.headers.common["Authorization"] = "Bearer " + token;
         localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        // localStorage.setItem("user", JSON.stringify(user));
         this.isLoggingIn = false;
       } catch (e) {
         console.error(e);
         this.error = "Cannot log in";
+      }
+    },
+    async getById(id) {
+      try {
+        const response = await axios.get(config.backendUrl + "/users/" + id);
+        return response.data;
+      } catch (error) {
+        console.log(error);
       }
     },
 

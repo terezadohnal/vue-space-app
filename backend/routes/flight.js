@@ -4,6 +4,7 @@ const flightService = require("../service/flight-service");
 
 router.get("/", async (req, res) => {
   const flights = await flightService.getAll();
+  console.log(flights);
   res.json(flights);
 });
 

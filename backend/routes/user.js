@@ -2,8 +2,19 @@ const express = require("express");
 const router = express.Router();
 const userService = require("../service/user-service");
 
-router.get("/", (req, res) => {
-  res.send("User page");
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const data = await userService.getById(id);
+  const response = {
+    id: data.user_id,
+    nickname: data.nickname,
+    firstname: data.firstname,
+    lastname: data.lastname,
+    role: data.role,
+    email: data.email,
+  };
+  res.send(response);
 });
 
 router.post("/register", async (req, res) => {
@@ -50,12 +61,7 @@ router.post("/login", async (req, res) => {
     message: "User logged in",
     token: await userService.generateToken(user.nickname),
     user: {
-      id: user.id,
-      nickname: user.nickname,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      role: user.role,
-      email: user.email,
+      id: user.user_id,
     },
   };
 
