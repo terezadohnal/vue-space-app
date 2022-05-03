@@ -41,8 +41,12 @@ class UserService {
 
   async generateToken(user) {
     const tokenPayload = {
+      id: user.user_id,
+      fistname: user.firstname,
+      lastname: user.lastname,
       nickname: user.nickname,
       role: user.role,
+      email: user.email,
     };
     return jwt.sign(tokenPayload, jwtConfig.secret, {
       algorithm: jwtConfig.algorithms[0],

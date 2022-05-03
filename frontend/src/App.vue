@@ -7,8 +7,10 @@
       <div class="link">
         <router-link :to="{ name: 'flights' }">Flights</router-link>
       </div>
-      <div class="link">
-        <router-link :to="{ name: 'user' }">User</router-link>
+      <div v-if="userStore.isAuthenticated" class="link">
+        <router-link :to="{ name: 'user', params: { id: 1 } }"
+          >User</router-link
+        >
       </div>
       <div v-if="!userStore.isAuthenticated" class="link">
         <router-link :to="{ name: 'register' }">Register</router-link>
@@ -39,7 +41,7 @@ export default {
   methods: {
     logout() {
       this.userStore.logout();
-      // this.$router.push({ name: "home" });
+      this.$router.push({ name: "home" });
     },
   },
 };

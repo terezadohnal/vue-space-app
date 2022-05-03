@@ -35,7 +35,7 @@ export const useFlightStore = defineStore("flight", {
         this.error = null;
         this.isLoading = false;
       } catch {
-        this.error = "Cannot download article!";
+        this.error = "Cannot download flights!";
       }
     },
     addOrUpdateInStore(id, flight) {

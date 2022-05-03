@@ -4,7 +4,6 @@ const flightService = require("../service/flight-service");
 
 router.get("/", async (req, res) => {
   const flights = await flightService.getAll();
-  console.log(flights);
   res.json(flights);
 });
 
@@ -23,6 +22,7 @@ router.post("/", async (req, res) => {
   // nemusime uvadet /create
   const data = req.body;
 
+  // TODO dodelat pro vsechny
   if (
     data.name === undefined ||
     data.name?.trim() === "" ||

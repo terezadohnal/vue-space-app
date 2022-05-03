@@ -1,10 +1,13 @@
 <template>
   <Headline :text="this.text" />
 
-  <h1>{{ userStore.user.firstname }} Profile</h1>
+  <h1>{{ userStore.user.nickname }} Profile</h1>
+  <div class="card">
+    <p>name: {{ userStore.user.nickname }}</p>
+  </div>
 </template>
 
-<script lang="ts">
+<script>
 import { mapStores } from "pinia/dist/pinia";
 import { defineComponent } from "vue";
 import { useUserStore } from "../stores/UserStore";
@@ -15,17 +18,19 @@ export default defineComponent({
   components: { Headline },
   data() {
     return {
-      text: "Profile",
+      text: Profile,
     };
+  },
+  created() {
+    this.userStore.loadById(this.id);
   },
   computed: {
     ...mapStores(useUserStore),
     id() {
-      // return parseInt(this.$route.params.id);
-      return;
+      return parseInt(this.$route.params.id);
     },
     user() {
-      // return this.userStore.getById(1);
+      return this.userStore.getById(this.id);
     },
   },
 });

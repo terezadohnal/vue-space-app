@@ -43,7 +43,7 @@ const router = createRouter({
           component: FlightDetailView,
         },
         {
-          path: "/",
+          path: "/user/:id",
           name: "user",
           component: UserView,
         },

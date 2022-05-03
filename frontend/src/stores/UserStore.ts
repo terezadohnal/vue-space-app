@@ -6,15 +6,6 @@ import jwtDecode from "jwt-decode";
 export const useUserStore = defineStore("user", {
   state() {
     const oldToken = localStorage.getItem("token");
-    // const userData = localStorage.getItem("user");
-    const userData = {
-      id: "",
-      nickname: "",
-      firstname: "",
-      lastname: "",
-      role: "",
-      email: "",
-    };
 
     if (oldToken) {
       axios.defaults.headers.common["Authorization"] = "Bearer " + oldToken;
@@ -26,16 +17,14 @@ export const useUserStore = defineStore("user", {
       error: null,
       loginMessage: null,
       afterLoginRoute: null,
-      user: null,
     };
   },
 
   getters: {
     isAuthenticated: (state) => state.token !== null,
-    user: (state) => jwtDecode(state.token),
+    user: (state) => jwtDecode(state.token), // zde uchovavam data o uzivateli, posilam tokenem
     error: (state) => state.error,
     afterLoginRoute: (state) => state.afterLoginRoute,
-    // getUser: (state) => state.user,
   },
 
   actions: {
@@ -47,33 +36,18 @@ export const useUserStore = defineStore("user", {
           config.backendUrl + "/users/login",
           data
         );
-
         const { token, user } = response.data;
-
         this.token = token;
         const userId = user.id;
-
-        const userData = await this.getById(userId);
-
-        this.user = userData;
-        console.log(user);
-        // this.user.id = userData.id;
-        // this.user.nickname = userData.nickname;
-        // this.user.firstname = userData.firstname;
-        // this.user.lastname = userData.lastname;
-        // this.user.role = userData.role;
-        // this.user.email = userData.email;
-
         axios.defaults.headers.common["Authorization"] = "Bearer " + token;
         localStorage.setItem("token", token);
-        // localStorage.setItem("user", JSON.stringify(user));
         this.isLoggingIn = false;
       } catch (e) {
         console.error(e);
         this.error = "Cannot log in";
       }
     },
-    async getById(id) {
+    async loadById(id) {
       try {
         const response = await axios.get(config.backendUrl + "/users/" + id);
         return response.data;

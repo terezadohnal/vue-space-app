@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
 
   const response = {
     message: "User logged in",
-    token: await userService.generateToken(user.nickname),
+    token: await userService.generateToken(user),
     user: {
       id: user.user_id,
     },
