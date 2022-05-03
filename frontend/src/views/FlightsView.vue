@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <Error v-if="flightStore.loginMessage" :text="flightStore.error" />
-    <Headline :text="this.text" />
+    <Headline text="FLIGHTS" />
 
     <div v-if="flightStore.isLoading">Loading flights...</div>
     <div v-else-if="flightStore.flights.length === 0">No flights.</div>

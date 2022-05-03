@@ -42,7 +42,7 @@ class UserService {
   async generateToken(user) {
     const tokenPayload = {
       id: user.user_id,
-      fistname: user.firstname,
+      firstname: user.firstname,
       lastname: user.lastname,
       nickname: user.nickname,
       role: user.role,

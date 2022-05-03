@@ -1,9 +1,13 @@
 <template>
-  <Headline :text="this.text" />
+  <Headline text="Profile" />
 
-  <h1>{{ userStore.user.nickname }} Profile</h1>
   <div class="card">
-    <p>name: {{ userStore.user.nickname }}</p>
+    <h2>USER INFORMATION</h2>
+    <p>Firstname: {{ userStore.user.firstname }}</p>
+    <p>Lastname: {{ userStore.user.lastname }}</p>
+    <p>Nickname: {{ userStore.user.nickname }}</p>
+    <p>Role: {{ userStore.user.role }}</p>
+    <p>Email: {{ userStore.user.email }}</p>
   </div>
 </template>
 
@@ -18,12 +22,12 @@ export default defineComponent({
   components: { Headline },
   data() {
     return {
-      text: Profile,
+      text: "Profile",
     };
   },
-  created() {
-    this.userStore.loadById(this.id);
-  },
+  // created() {
+  //   this.userStore.loadById(this.id);
+  // },
   computed: {
     ...mapStores(useUserStore),
     id() {
