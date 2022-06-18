@@ -31,7 +31,7 @@
             <ActionButton
               text="Delete reservation"
               type="button"
-              :onClick="seeDetail"
+              :onClick="() => deleteReservation(reservation.reservation_id)"
             />
             <ActionButton
               text="See detail"
