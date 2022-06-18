@@ -5,6 +5,8 @@ import FlightDetailView from "../views/FlightDetailView.vue";
 import UserView from "../views/UserView.vue";
 import RegisterUserView from "../views/RegisterUserView.vue";
 import LoginView from "../views/LoginView.vue";
+import ReservationView from "../views/ReservationView.vue";
+import EditFlightView from "../views/EditFlightView.vue";
 import AuthSection from "../AuthSection.vue";
 import { useUserStore } from "../stores/UserStore";
 
@@ -41,6 +43,16 @@ const router = createRouter({
           path: "/flights/:id",
           name: "flight-detail",
           component: FlightDetailView,
+        },
+        {
+          path: "/flights/:id/reservation",
+          name: "reservation",
+          component: ReservationView,
+        },
+        {
+          path: "/flights/:id/edit",
+          name: "edit-flight",
+          component: EditFlightView,
         },
         {
           path: "/user/:id",

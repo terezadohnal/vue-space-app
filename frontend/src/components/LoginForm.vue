@@ -24,20 +24,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import Input from "../components/esentials/Input.vue";
-import SubmitButton from "../components/esentials/SubmitButton.vue";
-import { useUserStore } from "../stores/UserStore";
-import { mapStores } from "pinia/dist/pinia";
+import { defineComponent } from 'vue';
+import Input from '../components/esentials/Input.vue';
+import SubmitButton from '../components/esentials/SubmitButton.vue';
+import { useUserStore } from '../stores/UserStore';
+import { mapStores } from 'pinia/dist/pinia';
 
 export default defineComponent({
-  name: "LoginForm",
+  name: 'LoginForm',
   components: { Input, SubmitButton },
   data() {
     return {
       user: {
-        nickname: "",
-        password: "",
+        nickname: '',
+        password: '',
       },
     };
   },
@@ -61,7 +61,7 @@ export default defineComponent({
         await this.userStore.login(this.user.nickname, this.user.password);
 
         if (!this.userStore.error) {
-          this.$router.push(this.userStore.afterLoginRoute ?? { name: "home" });
+          this.$router.push(this.userStore.afterLoginRoute ?? { name: 'home' });
         }
         this.userStore.setAfterLoginRoute(null);
 
@@ -72,8 +72,8 @@ export default defineComponent({
     },
 
     resetForm() {
-      this.user.nickname = "";
-      this.user.password = "";
+      this.user.nickname = '';
+      this.user.password = '';
     },
   },
 });

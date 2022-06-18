@@ -8,7 +8,7 @@
         <router-link :to="{ name: 'flights' }">Flights</router-link>
       </div>
       <div v-if="userStore.isAuthenticated" class="link">
-        <router-link :to="{ name: 'user', params: { id: 1 } }"
+        <router-link :to="{ name: 'user', params: { id: userStore.user.id } }"
           >User</router-link
         >
       </div>

@@ -1,14 +1,14 @@
-import { defineStore } from "pinia";
-import axios from "axios";
-import config from "../../config";
-import jwtDecode from "jwt-decode";
+import { defineStore } from 'pinia';
+import axios from 'axios';
+import config from '../../config';
+import jwtDecode from 'jwt-decode';
 
-export const useUserStore = defineStore("user", {
+export const useUserStore = defineStore('user', {
   state() {
-    const oldToken = localStorage.getItem("token");
+    const oldToken = localStorage.getItem('token');
 
     if (oldToken) {
-      axios.defaults.headers.common["Authorization"] = "Bearer " + oldToken;
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + oldToken;
     }
     return {
       token: oldToken,
@@ -17,6 +17,9 @@ export const useUserStore = defineStore("user", {
       error: null,
       loginMessage: null,
       afterLoginRoute: null,
+      reservations: [],
+      isLoading: false,
+      isDeleting: false,
     };
   },
 
@@ -25,6 +28,12 @@ export const useUserStore = defineStore("user", {
     user: (state) => jwtDecode(state.token), // zde uchovavam data o uzivateli, posilam tokenem
     error: (state) => state.error,
     afterLoginRoute: (state) => state.afterLoginRoute,
+    getReservationById: (state) => (id) => {
+      const res = state.reservations.find((reservation) => {
+        return reservation.flight_id === id;
+      });
+      return res;
+    },
   },
 
   actions: {
@@ -33,23 +42,23 @@ export const useUserStore = defineStore("user", {
         this.isLoggingIn = true;
         const data = { nickname, password };
         const response = await axios.post(
-          config.backendUrl + "/users/login",
+          config.backendUrl + '/users/login',
           data
         );
         const { token, user } = response.data;
         this.token = token;
         const userId = user.id;
-        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-        localStorage.setItem("token", token);
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+        localStorage.setItem('token', token);
         this.isLoggingIn = false;
       } catch (e) {
         console.error(e);
-        this.error = "Cannot log in";
+        this.error = 'Cannot log in';
       }
     },
     async loadById(id) {
       try {
-        const response = await axios.get(config.backendUrl + "/users/" + id);
+        const response = await axios.get(config.backendUrl + '/users/' + id);
         return response.data;
       } catch (error) {
         console.log(error);
@@ -61,14 +70,14 @@ export const useUserStore = defineStore("user", {
         this.isRegistering = true;
         const data = user;
         const response = await axios.post(
-          config.backendUrl + "/users/register",
+          config.backendUrl + '/users/register',
           data
         );
         this.error = null;
         this.isRegistering = false;
       } catch (e) {
         console.log(e);
-        this.error = "Cannot register";
+        this.error = 'Cannot register';
       }
     },
 
@@ -82,12 +91,56 @@ export const useUserStore = defineStore("user", {
 
     logout() {
       this.token = null;
-      delete axios.defaults.headers.common["Authorization"];
-      localStorage.removeItem("token");
+      delete axios.defaults.headers.common['Authorization'];
+      localStorage.removeItem('token');
     },
 
     clearError() {
       this.error = null;
+    },
+
+    async loadReservations() {
+      try {
+        this.isLoading = true;
+        const response = await axios.get(
+          config.backendUrl + '/flight/reservation/' + this.user.id
+        );
+        this.reservations = response.data;
+        this.error = null;
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    addReservation(id, reservation) {
+      const index = this.reservations.findIndex((r) => r.reservation_id === id);
+      console.log(reservation);
+      if (index !== -1) {
+        this.reservations[index] = reservation;
+      } else {
+        this.reservations.push(reservation);
+      }
+    },
+
+    async deleteReservation(id) {
+      try {
+        this.isDeleting = id;
+
+        // delete on server
+        await axios.delete(`${config.backendUrl}/flight/reservation/${id}`);
+
+        // delete locally
+        const index = this.reservation.findIndex(
+          (a) => a.reservation_id === id
+        );
+        this.articles.splice(index, 1);
+
+        this.error = null;
+        this.isDeleting = false;
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
 });

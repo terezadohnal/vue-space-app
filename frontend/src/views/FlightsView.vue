@@ -7,32 +7,32 @@
     <div v-else-if="flightStore.flights.length === 0">No flights.</div>
     <div class="flight-dashboard" v-else>
       <div class="card" :key="flight.id" v-for="flight in flightStore.flights">
-        <router-link
-          :to="{ name: 'flight-detail', params: { id: flight.flight_id } }"
-        >
-          <div class="link">
+        <div class="link">
+          <router-link
+            :to="{ name: 'flight-detail', params: { id: flight.flight_id } }"
+          >
             <h3>Flight {{ flight.name }}</h3>
             <p>Departure at: {{ flight.departure }}</p>
             <p>Destination: {{ flight.destination }}</p>
-          </div>
-        </router-link>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapStores } from "pinia/dist/pinia";
-import { useFlightStore } from "../stores/FlightStore";
-import Error from "../components/esentials/Error.vue";
-import Headline from "../components/esentials/Headline.vue";
+import { mapStores } from 'pinia/dist/pinia';
+import { useFlightStore } from '../stores/FlightStore';
+import Error from '../components/esentials/Error.vue';
+import Headline from '../components/esentials/Headline.vue';
 
 export default {
-  name: "Flights",
+  name: 'Flights',
   components: { Error, Headline },
   data() {
     return {
-      text: "Flights",
+      text: 'Flights',
     };
   },
   computed: {
@@ -49,6 +49,10 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  max-width: 1020px;
+  width: 100%;
+  padding: 20px;
+  margin: auto;
 }
 
 h1 {
@@ -75,14 +79,16 @@ h3 {
   font-weight: 600;
 }
 
-router-link .link a h3 {
+.link a {
   text-decoration: none;
 }
 
 .flight-dashboard {
   margin-top: 3em;
   display: flex;
-  justify-content: space-evenly;
+  gap: 12px;
+  justify-content: center;
   align-content: center;
+  flex-wrap: wrap;
 }
 </style>

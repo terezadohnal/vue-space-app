@@ -1,6 +1,6 @@
 <template>
-  <div class="submit-button">
-    <button type="{{this.type}}">
+  <div class="action-button">
+    <button @click.prevent="onClick" type="{{this.type}}">
       {{ this.text }}
     </button>
   </div>
@@ -8,18 +8,34 @@
 
 <script>
 export default {
-  name: "ActionButton",
+  name: 'ActionButton',
 
   props: {
     type: {
       type: String,
-      required: false,
-      default: "submit",
+      required: true,
     },
     text: {
       type: String,
       required: true,
     },
+    onClick: {
+      type: Function,
+      required: false,
+    },
   },
 };
 </script>
+
+<style scoped>
+button {
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid lightgray;
+  padding: 10px;
+}
+
+button:hover {
+  background-color: #6768aa;
+  color: white;
+}
+</style>
