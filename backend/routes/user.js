@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userService = require('../service/user-service');
+const notificationService = require('../service/notification-service');
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
@@ -28,6 +29,20 @@ router.post('/register', async (req, res) => {
       id: user.lastID,
     },
   };
+
+  if (user) {
+    await notificationService.create(
+      'New user was successfully registered',
+      'success',
+      user.lastID
+    );
+  } else {
+    await notificationService.create(
+      'Something went wrong, dude',
+      'error',
+      user.lastID
+    );
+  }
 
   res.status(201).send(response);
 });

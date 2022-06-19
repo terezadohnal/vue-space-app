@@ -35,7 +35,7 @@ export const useFlightStore = defineStore('flight', {
       try {
         this.isLoading = true;
         const response = await axios.get(config.backendUrl + '/flight/' + id);
-        this.addOrUpdateInStore(id, response.data[0]);
+        this.addOrUpdateInStore(id, response.data);
         this.error = null;
         this.isLoading = false;
       } catch {

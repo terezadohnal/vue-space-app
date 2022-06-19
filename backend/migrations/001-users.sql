@@ -54,7 +54,10 @@ CREATE TABLE IF NOT EXISTS reservation_passagers (
 CREATE TABLE IF NOT EXISTS notifications (
     notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
     title STRING NOT NULL,
-    type STRING NOT NULL
+    type STRING NOT NULL,
+    user_id INTEGER NOT NULL,
+    CONSTRAINT c1
+        FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
 

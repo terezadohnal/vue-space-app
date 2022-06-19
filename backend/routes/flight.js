@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const flightService = require('../service/flight-service');
 const reservationService = require('../service/reservation-service');
+const notificationService = require('../service/notification-service');
 
 router.get('/', async (req, res) => {
   const flights = await flightService.getAll();
@@ -39,6 +40,21 @@ router.post('/', async (req, res) => {
     return;
   }
   const flight = await flightService.create(data);
+
+  if (flight) {
+    await notificationService.create(
+      1,
+      `New flight added: ${flight.name}. Destination: ${flight.destination}. At: ${flight.departure}}`,
+      'success'
+    );
+  } else {
+    await notificationService.create(
+      1,
+      `Failed to add new flight with id: ${flight.flight_id}`,
+      'error'
+    );
+  }
+
   res.status(201).json(flight);
 });
 
@@ -56,6 +72,19 @@ router.post('/reservation', async (req, res) => {
   }
 
   const reservation = await reservationService.createReservation(data);
+  if (reservation) {
+    await notificationService.create(
+      data.user_id,
+      `You just created new reservation no. ${reservation.reservation_id} on flight: ${reservation.flight_id}.`,
+      'success'
+    );
+  } else {
+    await notificationService.create(
+      data.user_id,
+      `Ooops, seams like you're not going anywhere. Creating reservation failed}.`,
+      'error'
+    );
+  }
 
   res.status(201).json(reservation);
 });
@@ -63,7 +92,6 @@ router.post('/reservation', async (req, res) => {
 router.get('/reservation/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const reservations = await reservationService.getReservedFlights(id);
-  console.log(reservations);
   if (reservations) {
     res.status(201).json(reservations);
   } else {
@@ -73,7 +101,23 @@ router.get('/reservation/:id', async (req, res) => {
 
 router.delete('/reservation/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  await reservationService.deleteReservation(id);
+  console.log(req.body.user_id);
+  const user_id = req.body.user_id; // nefunguje!!!
+  console.log(user_id);
+  const result = await reservationService.deleteReservation(id);
+  if (result) {
+    await notificationService.create(
+      1,
+      `You just deleted your reservation.`,
+      'error'
+    );
+  } else {
+    await notificationService.create(
+      1,
+      `Ooops, deleting reservation failed.`,
+      'error'
+    );
+  }
   res.status(204).send('No Content');
 });
 

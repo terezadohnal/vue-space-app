@@ -57,7 +57,6 @@ export default {
   data() {
     return {
       text: 'Flight Detail',
-      // reservation_id: 0,
       numOfPassagers: 0,
     };
   },
@@ -93,7 +92,7 @@ export default {
           this.userStore.user.id,
           this.id
         );
-        this.userStore.addReservation(response[0].reservation_id, response[0]);
+        this.userStore.addReservation(response.reservation_id, response);
         // this.reservation_id = response[0].reservation_id;
       } catch {
         this.flightStore.error = 'neco se pokazilo';

@@ -74,7 +74,7 @@ export default defineComponent({
 
   methods: {
     deleteReservation(id) {
-      this.userStore.deleteReservation(id);
+      this.userStore.deleteReservation(id, this.id);
     },
     seeDetail() {},
   },

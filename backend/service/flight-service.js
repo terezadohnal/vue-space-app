@@ -6,7 +6,7 @@ class FlightService {
   }
 
   async getById(id) {
-    const result = await database().all(
+    const result = await database().get(
       'SELECT * FROM flights WHERE flight_id = ?',
       id
     );
