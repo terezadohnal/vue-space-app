@@ -42,4 +42,19 @@ CREATE TABLE IF NOT EXISTS reservation (
         FOREIGN KEY(user_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE IF NOT EXISTS reservation_passagers (
+    res_pass_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    reservation_id INTEGER NOT NULL,
+    name STRING NOT NULL,
+    surname STRING NOT NULL,
+    CONSTRAINT c1
+        FOREIGN KEY(reservation_id) REFERENCES reservation(reservation_id)
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+    notification_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title STRING NOT NULL,
+    type STRING NOT NULL
+);
+
 

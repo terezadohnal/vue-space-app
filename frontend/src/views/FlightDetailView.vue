@@ -10,27 +10,36 @@
       <p>DEPARTURE: {{ this.flight.departure }}</p>
       <p>DESTINATION: {{ this.flight.destination }}</p>
       <p>NUM. OF SEATS: {{ this.flight.seats }}</p>
+      <p>OCCUPACY: {{ this.numOfPassagers }}</p>
     </div>
     <div class="actions">
       <h3>ACTIONS</h3>
-      <div v-if="!this.isFlightReserved">
-        <Action-button
-          text="Create Reservation"
-          type="button"
-          :onClick="makeReservation"
-        />
-      </div>
-      <div>
-        <router-link :to="{ name: 'reservation', params: { id: this.id } }"
-          >Add Passagers</router-link
-        >
-      </div>
-      <br />
-      <router-link :to="{ name: 'edit-flight', params: { id: this.id } }"
-        >Edit Flight</router-link
-      >
+      <Action-button
+        text="Create Reservation"
+        type="button"
+        :onClick="makeReservation"
+        :isDisabled="this.isFlightReserved"
+      />
 
-      <Action-button text="Delete flight" type="button" />
+      <ActionButton
+        text="Add Passagers"
+        :onClick="goToPassagers"
+        :isDisabled="!this.isFlightReserved"
+        type="button"
+      />
+      <ActionButton
+        text="Edit Flight"
+        :onClick="goToEditingPage"
+        :isDisabled="true"
+        type="button"
+      />
+
+      <Action-button
+        text="Delete flight"
+        type="button"
+        :onClick="deleteFlight"
+        :isDisabled="true"
+      />
     </div>
   </div>
 </template>
@@ -48,12 +57,14 @@ export default {
   data() {
     return {
       text: 'Flight Detail',
-      reservation: 0,
+      // reservation_id: 0,
+      numOfPassagers: 0,
     };
   },
   created() {
     this.flightStore.loadById(this.id);
     this.userStore.loadReservations();
+    this.getNumOfPassagers(this.id);
   },
   computed: {
     ...mapStores(useFlightStore, useUserStore),
@@ -69,6 +80,10 @@ export default {
       const res = this.userStore.getReservationById(this.id) ? true : false;
       return res;
     },
+    getReservationId() {
+      const res = this.userStore.getReservationById(this.id);
+      return res.reservation_id;
+    },
   },
 
   methods: {
@@ -79,10 +94,28 @@ export default {
           this.id
         );
         this.userStore.addReservation(response[0].reservation_id, response[0]);
+        // this.reservation_id = response[0].reservation_id;
       } catch {
         this.flightStore.error = 'neco se pokazilo';
       }
     },
+
+    async getNumOfPassagers(id) {
+      const res = await this.flightStore.getNumOfPassagers(id);
+      this.numOfPassagers = res.num;
+    },
+
+    goToPassagers() {
+      this.$router.push({
+        name: 'reservations',
+        params: { flight_id: this.id, reservation_id: this.getReservationId },
+      });
+    },
+
+    goToEditingPage() {
+      this.$router.push({ name: 'edit-flight', params: { id: this.id } });
+    },
+    deleteFlight() {},
   },
 };
 </script>

@@ -1,19 +1,11 @@
 <template>
   <div class="inputs">
-    <Input
-      label="Name"
-      type="text"
-      :value="passager.name"
-      @input="setName"
-      @change="setName"
-      required
-    />
+    <Input label="Name" type="text" :value="name" @input="setName" required />
     <Input
       label="Surname"
       type="text"
-      :value="passager.surname"
+      :value="surname"
       @input="setSurname"
-      @change="setSurname"
       required
     />
   </div>
@@ -26,24 +18,37 @@ import Input from '../components/esentials/Input.vue';
 export default defineComponent({
   name: 'PassagerInput',
   components: { Input },
+  props: {
+    onNameChange: {
+      type: Function,
+      required: true,
+    },
+    onSurnameChange: {
+      type: Function,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    surname: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
-    return {
-      passager: {
-        name: '',
-        surname: '',
-      },
-    };
+    return {};
   },
   computed: {},
   methods: {
     setName(event: Event) {
       const target = <HTMLInputElement>event.target;
-      this.passager.name = target.value;
+      this.onNameChange(target.value);
     },
 
-    setPassword(event: Event) {
+    setSurname(event: Event) {
       const target = <HTMLInputElement>event.target;
-      this.passager.surname = target.value;
+      this.onSurnameChange(target.value);
     },
   },
 });

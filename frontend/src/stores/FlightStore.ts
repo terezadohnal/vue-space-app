@@ -71,6 +71,37 @@ export const useFlightStore = defineStore('flight', {
       }
     },
 
+    async addPassagers(reservation_id, passagers) {
+      try {
+        this.isLoading = true;
+        const data = {
+          reservation_id,
+          passagers,
+        };
+        const response = await axios.post(
+          config.backendUrl + '/flight/reservation/passagers',
+          data
+        );
+        this.error = null;
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async getNumOfPassagers(id) {
+      try {
+        this.isLoading = true;
+        const response = await axios.get(
+          config.backendUrl + '/flight/reservation/passagersInFlight/' + id
+        );
+        this.isLoading = false;
+        return response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     clearError() {
       this.error = null;
     },

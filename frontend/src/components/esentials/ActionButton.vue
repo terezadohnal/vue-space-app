@@ -1,6 +1,10 @@
 <template>
   <div class="action-button">
-    <button @click.prevent="onClick" type="{{this.type}}">
+    <button
+      @click.prevent="onClick"
+      type="{{this.type}}"
+      :disabled="this.isDisabled"
+    >
       {{ this.text }}
     </button>
   </div>
@@ -21,6 +25,10 @@ export default {
     },
     onClick: {
       type: Function,
+      required: false,
+    },
+    isDisabled: {
+      type: Boolean,
       required: false,
     },
   },

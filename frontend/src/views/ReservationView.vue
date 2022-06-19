@@ -1,30 +1,68 @@
 <template>
-  <div class="content">
+  <div v-if="this.flight" class="content">
     <Headline :text="this.text" />
     <div class="description">
       <p>You can add more passagers to your reservation</p>
     </div>
-    <PassagersForm />
+    <PassagersForm
+      :flight_id="this.flight_id"
+      :reservation_id="this.reservation_id"
+      :maxSeats="this.flight.seats - this.numOfPassagers"
+    />
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script>
 import PassagersForm from '../components/PassagersForm.vue';
 import Headline from '../components/esentials/Headline.vue';
+import { useFlightStore } from '../stores/FlightStore';
+import { useUserStore } from '../stores/UserStore';
+import { mapStores } from 'pinia/dist/pinia';
 
-export default defineComponent({
+export default {
+  name: 'Reservation detail',
   components: {
     PassagersForm,
     Headline,
   },
-  name: 'ReservationView',
   data() {
     return {
       text: 'Reservation Detail',
+      reservation: 0,
+      numOfPassagers: 0,
     };
   },
-});
+  created() {
+    this.flightStore.loadById(this.flight_id);
+    this.userStore.loadReservations();
+    this.getNumOfPassagers(this.flight_id);
+  },
+  computed: {
+    ...mapStores(useFlightStore, useUserStore),
+    flight_id() {
+      const queryId = this.$route.params.flight_id;
+      const id = typeof queryId === 'string' ? parseInt(queryId) : 0;
+      return id;
+    },
+    reservation_id() {
+      const queryId = this.$route.params.reservation_id;
+      const id = typeof queryId === 'string' ? parseInt(queryId) : 0;
+      return id;
+    },
+    flight() {
+      const flight = this.flightStore.getById(this.flight_id);
+      return flight;
+    },
+  },
+
+  methods: {
+    async getNumOfPassagers(id) {
+      const res = await this.flightStore.getNumOfPassagers(id);
+      console.log(res.num);
+      this.numOfPassagers = res.num;
+    },
+  },
+};
 </script>
 <style scoped>
 .content {
