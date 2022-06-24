@@ -12,6 +12,9 @@
           >User</router-link
         >
       </div>
+      <div class="link">
+        <router-link :to="{ name: 'notifications' }">Notifications</router-link>
+      </div>
       <div v-if="!userStore.isAuthenticated" class="link">
         <router-link :to="{ name: 'register' }">Register</router-link>
       </div>
@@ -29,19 +32,19 @@
 </template>
 
 <script>
-import "./assets/base.css";
-import { mapStores } from "pinia/dist/pinia";
-import { useUserStore } from "./stores/UserStore";
+import './assets/base.css';
+import { mapStores } from 'pinia/dist/pinia';
+import { useUserStore } from './stores/UserStore';
 
 export default {
-  name: "App",
+  name: 'App',
   computed: {
     ...mapStores(useUserStore),
   },
   methods: {
     logout() {
       this.userStore.logout();
-      this.$router.push({ name: "home" });
+      this.$router.push({ name: 'home' });
     },
   },
 };

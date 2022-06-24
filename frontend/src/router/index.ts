@@ -7,6 +7,7 @@ import RegisterUserView from '../views/RegisterUserView.vue';
 import LoginView from '../views/LoginView.vue';
 import ReservationView from '../views/ReservationView.vue';
 import EditFlightView from '../views/EditFlightView.vue';
+import NotificationsView from '../views/NotificationsView.vue';
 import AuthSection from '../AuthSection.vue';
 import { useUserStore } from '../stores/UserStore';
 
@@ -58,6 +59,11 @@ const router = createRouter({
           path: '/user/:id',
           name: 'user',
           component: UserView,
+        },
+        {
+          path: '/notifications',
+          name: 'notifications',
+          component: NotificationsView,
         },
       ],
     },
