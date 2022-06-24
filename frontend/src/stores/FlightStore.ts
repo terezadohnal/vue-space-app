@@ -51,6 +51,22 @@ export const useFlightStore = defineStore('flight', {
       }
     },
 
+    async createFlight(flight, user_id) {
+      const data = {
+        ...flight,
+        user_id,
+      };
+      console.log(data);
+      try {
+        this.isLoading = true;
+        await axios.post(config.backendUrl + '/flight', data);
+        this.error = null;
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
     async createReservation(user_id, flight_id) {
       try {
         this.isLoading = true;

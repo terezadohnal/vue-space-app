@@ -22,19 +22,21 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  // nemusime uvadet /create
   const data = req.body;
-
-  // TODO dodelat pro vsechny
+  console.log(data);
   if (
     data.name === undefined ||
     data.name?.trim() === '' ||
     data.aircraft === undefined ||
     data.aircraft?.trim() === '' ||
+    data.company === undefined ||
+    data.company?.trim() === '' ||
     data.departure === undefined ||
     data.departure === '0000-00-00 00:00:00' ||
     data.destination === undefined ||
-    data.destination?.trim() === ''
+    data.destination?.trim() === '' ||
+    data.seats === undefined ||
+    data.seats === 0
   ) {
     res.status(400).send('Bad input');
     return;
@@ -44,7 +46,7 @@ router.post('/', async (req, res) => {
   if (flight) {
     await notificationService.create(
       1,
-      `New flight added: ${flight.name}. Destination: ${flight.destination}. At: ${flight.departure}}`,
+      `New flight added: ${flight.name}. Destination: ${flight.destination}. At: ${flight.departure}`,
       'success'
     );
   } else {
@@ -138,6 +140,8 @@ router.post('/reservation/passagers', async (req, res) => {
   } else {
     res.status(404).send('Not found');
   }
+
+  //notifikace
 });
 
 router.get('/reservation/passagersInFlight/:id', async (req, res) => {

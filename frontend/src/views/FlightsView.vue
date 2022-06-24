@@ -3,6 +3,20 @@
     <Error v-if="flightStore.loginMessage" :text="flightStore.error" />
     <Headline text="FLIGHTS" />
 
+    <!-- <div v-if="this.userStore.user.role === 'technician'"> -->
+    <div>
+      <Action-button
+        text="Add new flight"
+        type="button"
+        :onClick="showForm"
+        :isDisabled="false"
+      />
+    </div>
+    <div v-if="isFormShown">
+      <NewFlightForm />
+    </div>
+    <!-- </div> -->
+
     <div v-if="flightStore.isLoading">Loading flights...</div>
     <div v-else-if="flightStore.flights.length === 0">No flights.</div>
     <div class="flight-dashboard" v-else>
@@ -24,22 +38,33 @@
 <script>
 import { mapStores } from 'pinia/dist/pinia';
 import { useFlightStore } from '../stores/FlightStore';
+import { useUserStore } from '../stores/UserStore';
 import Error from '../components/esentials/Error.vue';
 import Headline from '../components/esentials/Headline.vue';
+import ActionButton from '../components/esentials/ActionButton.vue';
+import NewFlightForm from '../components/NewFlightForm.vue';
 
 export default {
   name: 'Flights',
-  components: { Error, Headline },
+  components: { Error, Headline, ActionButton, NewFlightForm },
   data() {
     return {
       text: 'Flights',
+      isFormShown: false,
     };
   },
   computed: {
-    ...mapStores(useFlightStore),
+    ...mapStores(useFlightStore, useUserStore),
   },
   created() {
     this.flightStore.loadAll();
+  },
+  methods: {
+    showForm() {
+      this.isFormShown === false
+        ? (this.isFormShown = true)
+        : (this.isFormShown = false);
+    },
   },
 };
 </script>

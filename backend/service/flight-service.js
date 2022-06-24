@@ -16,11 +16,10 @@ class FlightService {
 
   async create(data) {
     const result = await database().run(
-      'INSERT INTO flights (name, aircraft, company, date, departure, destination, seats) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO flights (name, aircraft, company, date, departure, destination, seats) VALUES (?, ?, ?, "2022-07-34", ?, ?, ?)',
       data.name,
       data.aircraft,
       data.company,
-      data.date,
       data.departure,
       data.destination,
       data.seats
