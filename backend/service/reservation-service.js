@@ -87,6 +87,14 @@ class ReservationService {
     );
     return result;
   }
+
+  async getPassagersInFlight(id) {
+    const result = await database().all(
+      'SELECT rs.name, rs.surname FROM reservation_passagers AS rs JOIN reservation USING(reservation_id) JOIN flights USING (flight_id) WHERE flight_id = ?',
+      id
+    );
+    return result;
+  }
 }
 
 module.exports = new ReservationService();

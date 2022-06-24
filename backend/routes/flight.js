@@ -123,6 +123,15 @@ router.delete('/reservation/:id', async (req, res) => {
   res.status(204).send('No Content');
 });
 
+router.get('/reservation/passagers/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const passagers = await reservationService.getPassagersInFlight(id);
+  if (passagers) {
+    res.status(201).json(passagers);
+  } else {
+    res.status(404).send('Not found');
+  }
+});
 router.post('/reservation/passagers', async (req, res) => {
   const data = req.body;
   if (

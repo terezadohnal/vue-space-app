@@ -8,6 +8,7 @@ export const useFlightStore = defineStore('flight', {
     flights: [],
     isLoading: true,
     error: null,
+    passagers: [],
   }),
 
   getters: {
@@ -56,7 +57,6 @@ export const useFlightStore = defineStore('flight', {
         ...flight,
         user_id,
       };
-      console.log(data);
       try {
         this.isLoading = true;
         await axios.post(config.backendUrl + '/flight', data);
@@ -113,6 +113,20 @@ export const useFlightStore = defineStore('flight', {
         );
         this.isLoading = false;
         return response.data;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async loadPassagers(id) {
+      try {
+        this.isLoading = true;
+        const response = await axios.get(
+          config.backendUrl + '/flight/reservation/passagers/' + id
+        );
+        this.passagers = response.data;
+        console.log(this.passagers);
+        this.isLoading = false;
       } catch (e) {
         console.log(e);
       }

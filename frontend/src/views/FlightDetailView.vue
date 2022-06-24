@@ -12,6 +12,12 @@
       <p>NUM. OF SEATS: {{ this.flight.seats }}</p>
       <p>OCCUPACY: {{ this.numOfPassagers }}</p>
     </div>
+    <div>
+      <h3>Passagers</h3>
+      <div v-for="passager in flightStore.passagers" :key="passager.name">
+        <p>{{ passager.name }} {{ passager.surname }}</p>
+      </div>
+    </div>
     <div class="actions">
       <h3>ACTIONS</h3>
       <Action-button
@@ -64,6 +70,7 @@ export default {
     this.flightStore.loadById(this.id);
     this.userStore.loadReservations();
     this.getNumOfPassagers(this.id);
+    this.flightStore.loadPassagers(this.id);
   },
   computed: {
     ...mapStores(useFlightStore, useUserStore),
