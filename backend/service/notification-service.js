@@ -9,6 +9,13 @@ class NotificationService {
       user_id
     );
   }
+
+  async getAll(user_id) {
+    return await database().all(
+      'SELECT * FROM notifications WHERE user_id = ?',
+      user_id
+    );
+  }
 }
 
 module.exports = new NotificationService();
