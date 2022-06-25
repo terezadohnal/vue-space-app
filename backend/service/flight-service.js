@@ -27,6 +27,24 @@ class FlightService {
 
     return await this.getById(result.lastID);
   }
+
+  async getStatusById(id) {
+    const result = await database().get(
+      'SELECT * FROM flight_status WHERE flight_status_id = ?',
+      id
+    );
+
+    return await result;
+  }
+
+  async setFlightStatus(data) {
+    const result = await database().run(
+      'INSERT INTO flight_status (flight_id, flight_status_text) VALUES (?,?)',
+      data.flight_id,
+      data.status
+    );
+    return await this.getStatusById(result.lastID);
+  }
 }
 
 module.exports = new FlightService();

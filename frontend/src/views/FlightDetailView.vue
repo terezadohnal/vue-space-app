@@ -34,17 +34,23 @@
         type="button"
       />
       <ActionButton
-        text="Edit Flight"
-        :onClick="goToEditingPage"
-        :isDisabled="true"
+        text="Departed"
+        :onClick="() => setFlighStatus('departed')"
+        :isDisabled="false"
         type="button"
       />
 
       <Action-button
-        text="Delete flight"
+        text="In Air"
         type="button"
-        :onClick="deleteFlight"
-        :isDisabled="true"
+        :onClick="() => setFlighStatus('inAir')"
+        :isDisabled="false"
+      />
+      <Action-button
+        text="Arrived"
+        type="button"
+        :onClick="() => setFlighStatus('arrived')"
+        :isDisabled="false"
       />
     </div>
   </div>
@@ -64,6 +70,7 @@ export default {
     return {
       text: 'Flight Detail',
       numOfPassagers: 0,
+      status: '',
     };
   },
   created() {
@@ -118,10 +125,17 @@ export default {
       });
     },
 
-    goToEditingPage() {
-      this.$router.push({ name: 'edit-flight', params: { id: this.id } });
+    setFlighStatus(status) {
+      try {
+        this.flightStore.setFlightStatus(
+          status,
+          this.id,
+          this.userStore.user.id
+        );
+      } catch (e) {
+        console.log(e);
+      }
     },
-    deleteFlight() {},
   },
 };
 </script>

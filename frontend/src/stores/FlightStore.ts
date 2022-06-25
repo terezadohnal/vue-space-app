@@ -125,8 +125,24 @@ export const useFlightStore = defineStore('flight', {
           config.backendUrl + '/flight/reservation/passagers/' + id
         );
         this.passagers = response.data;
-        console.log(this.passagers);
         this.isLoading = false;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async setFlightStatus(status, flight_id, user_id) {
+      const data = {
+        status,
+        flight_id,
+        user_id,
+      };
+      try {
+        this.isLoading = true;
+        const response = await axios.post(
+          config.backendUrl + '/flight/status',
+          data
+        );
+        this.isLoading = true;
       } catch (e) {
         console.log(e);
       }

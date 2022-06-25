@@ -23,7 +23,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const data = req.body;
-  console.log(data);
   if (
     data.name === undefined ||
     data.name?.trim() === '' ||
@@ -161,6 +160,16 @@ router.get('/reservation/passagersInFlight/:id', async (req, res) => {
 
   const number = await reservationService.getNumberOfPassagersInFlight(id);
   res.status(200).json(number);
+});
+
+router.post('/status', async (req, res) => {
+  const data = req.body;
+  const status = await flightService.setFlightStatus(data);
+  if (status) {
+    res.status(201).json(status);
+  } else {
+    res.status(404).send('Not found');
+  }
 });
 
 module.exports = router;

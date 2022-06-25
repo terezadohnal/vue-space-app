@@ -12,5 +12,6 @@
     {
       "path": "./tsconfig.vite-config.json"
     }
-  ]
+  ],
+  "allowJs": true
 }
