@@ -10,4 +10,10 @@ router.get('/:id', async (req, res) => {
   res.json(result);
 });
 
+router.post('/', async (req, res) => {
+  const data = req.body;
+  const result = await notificationService.create(data);
+  res.json(result);
+});
+
 module.exports = router;

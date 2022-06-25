@@ -17,12 +17,28 @@ export const useNotificationStore = defineStore('notification', {
           config.backendUrl + '/notifications/' + user_id
         );
         this.notifications = response.data;
-        console.log(response);
-        console.log(notifications);
         this.error = null;
         this.isLoading = false;
       } catch (e) {
         this.error = 'Cannot download notifications!';
+      }
+    },
+    async create(notification, user_id) {
+      try {
+        this.isLoading = true;
+        const data = {
+          ...notification,
+          user_id,
+        };
+        const response = await axios.post(
+          config.backendUrl + '/notifications',
+          data
+        );
+        console.log(response);
+        this.error = null;
+        this.isLoading = false;
+      } catch (e) {
+        console.log(e);
       }
     },
   },
