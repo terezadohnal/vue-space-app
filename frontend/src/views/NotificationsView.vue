@@ -1,26 +1,30 @@
 <template>
   <Headline text="NOTIFICATIONS" />
 
-  <div>
-    <ActionButton
-      text="Add new notification"
-      type="button"
-      :onClick="showForm"
-      :isDisabled="false"
-    />
-  </div>
-  <div v-if="isFormShown">
-    <NewNotificationForm />
-  </div>
-  <div>
-    <div
-      v-for="notification in notificationStore.notifications"
-      :key="notification.notification_id"
-    >
-      <p>
-        {{ notification.type === 'success' ? '🎉' : '⚡️' }}
-        {{ notification.title }}
-      </p>
+  <div class="content">
+    <div class="notForm" v-if="whoCanSeeThis()">
+      <ActionButton
+        :text="buttonTitle"
+        type="button"
+        :onClick="showForm"
+        :isDisabled="false"
+      />
+      <div v-if="isFormShown">
+        <NewNotificationForm />
+      </div>
+    </div>
+
+    <div class="notifications">
+      <div
+        v-for="notification in notificationStore.notifications"
+        :key="notification.notification_id"
+        class="notification"
+      >
+        <p>
+          {{ notificationType(notification.type) }}
+          {{ notification.title }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +54,9 @@ export default defineComponent({
 
   computed: {
     ...mapStores(useUserStore, useNotificationStore),
+    buttonTitle() {
+      return this.isFormShown === true ? 'Cancel' : 'Add New Notification';
+    },
   },
 
   methods: {
@@ -58,6 +65,47 @@ export default defineComponent({
         ? (this.isFormShown = true)
         : (this.isFormShown = false);
     },
+    notificationType(type) {
+      if (type == 'success') return '🎉';
+      else if (type === 'warning') return '❗️';
+      else return '⚡️';
+    },
+    whoCanSeeThis() {
+      if (
+        this.userStore.user.role === 'secretary' ||
+        this.userStore.user.role === 'technician' ||
+        this.userStore.user.role === 'admin'
+      )
+        return true;
+      else return false;
+    },
   },
 });
 </script>
+<style scoped>
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 5em;
+}
+.notForm {
+  padding-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.notifications {
+  display: flex;
+  justify-content: left;
+  flex-direction: column;
+  gap: 10px;
+}
+
+p {
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+</style>

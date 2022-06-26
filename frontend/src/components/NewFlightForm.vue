@@ -136,6 +136,11 @@ export default defineComponent({
 .form {
   display: flex;
   justify-content: center;
-  margin: 5px;
+  width: fit-content;
+  margin: auto;
+  padding: 20px 60px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgb(226, 226, 226);
 }
 </style>

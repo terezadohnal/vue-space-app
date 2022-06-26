@@ -8,6 +8,14 @@
         <div class="headline-caption">
           <p>Book your flight today!</p>
         </div>
+        <div>
+          <ActionButton
+            :text="buttonTitle"
+            :onClick="() => goTo()"
+            :isDisabled="false"
+            type="button"
+          />
+        </div>
       </div>
       <div class="header-image">
         <img :src="image" alt="To the moon" />
@@ -17,14 +25,33 @@
 </template>
 
 <script>
-import image from "../img/Outer_space.png";
+import { mapStores } from 'pinia/dist/pinia';
+import ActionButton from '../components/esentials/ActionButton.vue';
+import { useUserStore } from '../stores/UserStore';
+import image from '../img/Outer_space.png';
 
 export default {
-  name: "home",
+  name: 'home',
+  components: { ActionButton },
   data() {
     return {
       image: image,
     };
+  },
+  computed: {
+    ...mapStores(useUserStore),
+    buttonTitle() {
+      return this.userStore.isAuthenticated ? 'Browse Flights' : 'Sign Up here';
+    },
+  },
+  methods: {
+    goTo() {
+      if (this.userStore.isAuthenticated) {
+        this.$router.push({ name: 'flights' });
+      } else {
+        this.$router.push({ name: 'register' });
+      }
+    },
   },
 };
 </script>

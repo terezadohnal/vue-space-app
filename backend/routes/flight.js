@@ -23,6 +23,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const data = req.body;
+  console.log(data);
   if (
     data.name === undefined ||
     data.name?.trim() === '' ||
@@ -43,17 +44,24 @@ router.post('/', async (req, res) => {
   const flight = await flightService.create(data);
 
   if (flight) {
-    await notificationService.create(
-      1,
-      `New flight added: ${flight.name}. Destination: ${flight.destination}. At: ${flight.departure}`,
-      'success'
-    );
+    await notificationService.create({
+      user_id: data.user_id,
+      title: `New flight added: ${flight.name}. Destination: ${flight.destination}. At: ${flight.departure}`,
+      type: 'success',
+    });
   } else {
-    await notificationService.create(
-      1,
-      `Failed to add new flight with id: ${flight.flight_id}`,
-      'error'
-    );
+    await notificationService.create({
+      user_id: data.user_id,
+      title: `Failed to add new flight with id: ${flight.flight_id}`,
+      type: 'error',
+    });
+  }
+
+  if (flight) {
+    await flightService.setFlightStatus({
+      flight_id: flight.flight_id,
+      status: 'To be departed',
+    });
   }
 
   res.status(201).json(flight);
@@ -74,17 +82,17 @@ router.post('/reservation', async (req, res) => {
 
   const reservation = await reservationService.createReservation(data);
   if (reservation) {
-    await notificationService.create(
-      data.user_id,
-      `You just created new reservation no. ${reservation.reservation_id} on flight: ${reservation.flight_id}.`,
-      'success'
-    );
+    await notificationService.create({
+      user_id: data.user_id,
+      title: `You just created new reservation no. ${reservation.reservation_id} on flight: ${reservation.flight_id}.`,
+      type: 'success',
+    });
   } else {
-    await notificationService.create(
-      data.user_id,
-      `Ooops, seams like you're not going anywhere. Creating reservation failed}.`,
-      'error'
-    );
+    await notificationService.create({
+      user_id: data.user_id,
+      title: `Ooops, seams like you're not going anywhere. Creating reservation failed}.`,
+      type: 'error',
+    });
   }
 
   res.status(201).json(reservation);
@@ -102,22 +110,20 @@ router.get('/reservation/:id', async (req, res) => {
 
 router.delete('/reservation/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  console.log(req.body.user_id);
-  const user_id = req.body.user_id; // nefunguje!!!
-  console.log(user_id);
+  const user_id = req.body.user_id;
   const result = await reservationService.deleteReservation(id);
   if (result) {
-    await notificationService.create(
-      1,
-      `You just deleted your reservation.`,
-      'error'
-    );
+    await notificationService.create({
+      user_id: user_id,
+      title: `You just deleted your reservation.`,
+      type: 'warning',
+    });
   } else {
-    await notificationService.create(
-      1,
-      `Ooops, deleting reservation failed.`,
-      'error'
-    );
+    await notificationService.create({
+      user_id: user_id,
+      title: `Ooops, deleting reservation failed.`,
+      type: 'error',
+    });
   }
   res.status(204).send('No Content');
 });
@@ -133,6 +139,7 @@ router.get('/reservation/passagers/:id', async (req, res) => {
 });
 router.post('/reservation/passagers', async (req, res) => {
   const data = req.body;
+  console.log(data);
   if (
     data.reservation_id === undefined ||
     data.reservation_id < 0 ||
@@ -149,7 +156,19 @@ router.post('/reservation/passagers', async (req, res) => {
     res.status(404).send('Not found');
   }
 
-  //notifikace
+  if (newPassagers) {
+    await notificationService.create({
+      user_id: data.user_id,
+      title: `You just added new passagers to your reservation.`,
+      type: 'success',
+    });
+  } else {
+    await notificationService.create({
+      user_id: data.user_id,
+      title: `Ooops, adding passagers to your reservation failed.`,
+      type: 'error',
+    });
+  }
 });
 
 router.get('/reservation/passagersInFlight/:id', async (req, res) => {
@@ -170,6 +189,14 @@ router.post('/status', async (req, res) => {
   } else {
     res.status(404).send('Not found');
   }
+});
+
+router.get('/status/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  console.log(id);
+  const status = await flightService.getStatusById(id);
+  console.log(status);
+  res.status(200).json(status);
 });
 
 module.exports = router;

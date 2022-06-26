@@ -1,16 +1,37 @@
 <template>
   <Headline :text="this.text" />
+  <div class="infoBar">
+    <div class="barItem">
+      <p>Status:</p>
+      <p>{{ this.status }}</p>
+    </div>
+
+    <div class="barItem">
+      <p>Capacity:</p>
+      <p>{{ this.numOfPassagers }}/{{ this.flight.seats }}</p>
+    </div>
+  </div>
   <div v-if="this.flight" class="content">
     <div class="info">
       <h3>INFO</h3>
-      <p>NAME OF FLIGHT: {{ this.flight.name }}</p>
-      <p>AIRCRAFT: {{ this.flight.aircraft }}</p>
-      <p>COMPANY: {{ this.flight.company }}</p>
-      <p>DATE: {{ this.flight.date }}</p>
-      <p>DEPARTURE: {{ this.flight.departure }}</p>
-      <p>DESTINATION: {{ this.flight.destination }}</p>
-      <p>NUM. OF SEATS: {{ this.flight.seats }}</p>
-      <p>OCCUPACY: {{ this.numOfPassagers }}</p>
+      <div class="infoText">
+        <p><span> NAME OF FLIGHT:</span> {{ this.flight.name }}</p>
+      </div>
+      <div class="infoText">
+        <p><span>AIRCRAFT:</span> {{ this.flight.aircraft }}</p>
+      </div>
+      <div class="infoText">
+        <p><span>COMPANY:</span> {{ this.flight.company }}</p>
+      </div>
+      <div class="infoText">
+        <p><span>DATE:</span> {{ this.flight.date }}</p>
+      </div>
+      <div class="infoText">
+        <p><span>DEPARTURE:</span> {{ this.flight.departure }}</p>
+      </div>
+      <div class="infoText">
+        <p><span>DESTINATION:</span> {{ this.flight.destination }}</p>
+      </div>
     </div>
     <div>
       <h3>Passagers</h3>
@@ -21,36 +42,45 @@
     <div class="actions">
       <h3>ACTIONS</h3>
       <Action-button
-        text="Create Reservation"
+        :text="ButtonTitle"
         type="button"
         :onClick="makeReservation"
         :isDisabled="this.isFlightReserved"
       />
+      <div v-if="this.numOfPassagers < this.flight.seats">
+        <ActionButton
+          text="Add Passagers"
+          :onClick="goToPassagers"
+          :isDisabled="!this.isFlightReserved"
+          type="button"
+        />
+      </div>
+      <div v-else class="noSeatsContainer">
+        <p>❗️No more seats available❗️</p>
+      </div>
+    </div>
+
+    <div v-if="this.userStore.user.role === 'technician'">
+      <h3>Flight Status</h3>
 
       <ActionButton
-        text="Add Passagers"
-        :onClick="goToPassagers"
-        :isDisabled="!this.isFlightReserved"
-        type="button"
-      />
-      <ActionButton
         text="Departed"
-        :onClick="() => setFlighStatus('departed')"
-        :isDisabled="false"
+        :onClick="() => setFlighStatus('Departed')"
+        :isDisabled="this.status !== 'To be departed'"
         type="button"
       />
 
       <Action-button
         text="In Air"
         type="button"
-        :onClick="() => setFlighStatus('inAir')"
-        :isDisabled="false"
+        :onClick="() => setFlighStatus('In air')"
+        :isDisabled="this.status !== 'Departed'"
       />
       <Action-button
         text="Arrived"
         type="button"
-        :onClick="() => setFlighStatus('arrived')"
-        :isDisabled="false"
+        :onClick="() => setFlighStatus('Arrived')"
+        :isDisabled="this.status !== 'In air'"
       />
     </div>
   </div>
@@ -78,6 +108,7 @@ export default {
     this.userStore.loadReservations();
     this.getNumOfPassagers(this.id);
     this.flightStore.loadPassagers(this.id);
+    this.getStatus(this.id);
   },
   computed: {
     ...mapStores(useFlightStore, useUserStore),
@@ -97,6 +128,9 @@ export default {
       const res = this.userStore.getReservationById(this.id);
       return res.reservation_id;
     },
+    ButtonTitle() {
+      return this.isFlightReserved ? 'Reserved' : 'Create Reservation';
+    },
   },
 
   methods: {
@@ -107,7 +141,7 @@ export default {
           this.id
         );
         this.userStore.addReservation(response.reservation_id, response);
-        // this.reservation_id = response[0].reservation_id;
+        this.flightStore.loadPassagers(this.id);
       } catch {
         this.flightStore.error = 'neco se pokazilo';
       }
@@ -120,7 +154,7 @@ export default {
 
     goToPassagers() {
       this.$router.push({
-        name: 'reservations',
+        name: 'passagers',
         params: { flight_id: this.id, reservation_id: this.getReservationId },
       });
     },
@@ -132,17 +166,69 @@ export default {
           this.id,
           this.userStore.user.id
         );
+        this.status = status;
       } catch (e) {
         console.log(e);
       }
+    },
+
+    async getStatus(id) {
+      const stat = await this.flightStore.getFlightStatus(id);
+      this.status = stat.flight_status_text;
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .content {
   display: flex;
   justify-content: space-evenly;
+}
+
+h3 {
+  font-size: 28px;
+  color: #e0bad7;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  padding-bottom: 10px;
+}
+
+span {
+  color: #439775;
+  font-weight: 700;
+}
+
+p {
+  font-size: 18px;
+}
+
+.infoText {
+  padding-bottom: 10px;
+}
+
+.noSeatsContainer {
+  border: 1px solid rgb(219, 219, 219);
+  padding: 10px;
+  background-color: #e0bad7;
+  border-radius: 20px;
+  margin-top: 10px;
+}
+
+.infoBar {
+  width: 50%;
+  margin: auto;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 5px;
+  border-bottom: 1px solid rgb(219, 219, 219);
+  border-top: 1px solid rgb(219, 219, 219);
+}
+
+.barItem {
+  display: flex;
+  gap: 15px;
 }
 </style>

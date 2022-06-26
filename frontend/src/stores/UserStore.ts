@@ -126,10 +126,10 @@ export const useUserStore = defineStore('user', {
     async deleteReservation(id, user_id) {
       try {
         this.isDeleting = true;
-
+        console.log(user_id);
         // delete on server
         await axios.delete(config.backendUrl + '/flight/reservation/' + id, {
-          user_id,
+          data: { user_id },
         });
 
         // delete locally

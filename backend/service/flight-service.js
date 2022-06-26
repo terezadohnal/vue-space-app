@@ -29,12 +29,10 @@ class FlightService {
   }
 
   async getStatusById(id) {
-    const result = await database().get(
-      'SELECT * FROM flight_status WHERE flight_status_id = ?',
+    return await database().get(
+      'SELECT * FROM flight_status WHERE flight_id = ? ORDER BY flight_status_id DESC',
       id
     );
-
-    return await result;
   }
 
   async setFlightStatus(data) {

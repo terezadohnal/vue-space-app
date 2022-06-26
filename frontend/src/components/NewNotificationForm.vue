@@ -1,22 +1,16 @@
 <template>
   <div class="form">
     <form @submit="createNewNotification">
-      <label for="type">Type</label>
-      <select name="type" id="type" @change="setType">
-        <option value="">Choose</option>
-        <option value="success">Success</option>
-        <option value="error">Error</option>
-        <option value="warning">Warning</option>
-      </select>
-
-      <!-- <vSelect
-        name="type"
-        id="type"
-        :value="notification.type"
-        :options="['success', 'error', 'warning']"
-        @input="setType"
-        @change="setType"
-      ></vSelect> -->
+      <div class="selectContainer">
+        <label for="type">Type</label>
+        <vSelect
+          name="type"
+          id="type"
+          v-model="notification.type"
+          :options="['success', 'error', 'warning']"
+          class="select"
+        ></vSelect>
+      </div>
       <Input
         label="Title"
         type="text"
@@ -49,7 +43,7 @@ export default defineComponent({
     return {
       notification: {
         title: '',
-        type: '',
+        type: 'success',
       },
     };
   },
@@ -62,11 +56,6 @@ export default defineComponent({
       this.notification.title = target.value;
     },
 
-    setType(event: Event) {
-      const target = <HTMLSelectElement>event.target;
-      this.notification.type = target.value;
-    },
-
     createNewNotification(event: SubmitEvent) {
       event.preventDefault();
       try {
@@ -74,7 +63,7 @@ export default defineComponent({
           this.notification,
           this.userStore.user.id
         );
-        this.resetForm;
+        this.resetForm();
       } catch (error) {
         console.log(error);
       }
@@ -93,5 +82,13 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   margin: 5px;
+  transition: all 0.5s ease-out;
+}
+
+.select {
+  padding: 5px 0;
+}
+.selectContainer {
+  padding-bottom: 5px;
 }
 </style>

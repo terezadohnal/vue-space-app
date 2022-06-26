@@ -30,11 +30,11 @@ export const useNotificationStore = defineStore('notification', {
           ...notification,
           user_id,
         };
+        console.log(data);
         const response = await axios.post(
           config.backendUrl + '/notifications',
           data
         );
-        console.log(response);
         this.error = null;
         this.isLoading = false;
       } catch (e) {

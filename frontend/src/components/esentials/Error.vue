@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "Error",
+  name: 'Error',
 
   props: {
     text: {
@@ -18,7 +18,7 @@ export default {
 
   methods: {
     onHideClick() {
-      this.$emit("hide");
+      this.$emit('hide');
     },
   },
 };
@@ -26,7 +26,7 @@ export default {
 
 <style>
 .error {
-  background: lightcoral;
+  background: rgb(223, 171, 171);
   color: rgb(129, 129, 129);
   padding: 2em;
   width: fit-content;

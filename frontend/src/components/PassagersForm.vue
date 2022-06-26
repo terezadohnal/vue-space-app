@@ -13,12 +13,14 @@
       </div>
       <SubmitButton type="submit" text="Add Passagers" />
     </form>
-    <ActionButton
-      :onClick="handleAddInputClick"
-      text="Add Passager"
-      type="button"
-      :isDisabled="!(this.maxSeats > passagerslength)"
-    />
+    <div>
+      <ActionButton
+        :onClick="handleAddInputClick"
+        text="Add Passager"
+        type="button"
+        :isDisabled="!(this.maxSeats > passagerslength)"
+      />
+    </div>
   </div>
 </template>
 
@@ -29,6 +31,7 @@ import ActionButton from '../components/esentials/ActionButton.vue';
 import PassagerInput from '../components/PassagerInput.vue';
 import { mapStores } from 'pinia/dist/pinia';
 import { useFlightStore } from '../stores/FlightStore';
+import { useUserStore } from '../stores/UserStore';
 
 export default defineComponent({
   name: 'PassagersForm',
@@ -58,7 +61,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapStores(useFlightStore),
+    ...mapStores(useFlightStore, useUserStore),
     passagerslength() {
       return this.passagers.length ? this.passagers.length : 0;
     },
@@ -66,7 +69,15 @@ export default defineComponent({
   methods: {
     async addPassagers(event) {
       event.preventDefault();
-      this.flightStore.addPassagers(this.reservation_id, this.passagers);
+      this.flightStore.addPassagers(
+        this.reservation_id,
+        this.userStore.user.id,
+        this.passagers
+      );
+      this.$router.push({
+        name: 'flight-detail',
+        params: { id: this.flight_id },
+      });
     },
     handleAddInputClick() {
       this.passagers.push({
@@ -87,7 +98,7 @@ export default defineComponent({
 .form {
   display: flex;
   justify-content: center;
-  margin: 5px;
+  margin-top: 50px;
 }
 
 .buttonPosition {

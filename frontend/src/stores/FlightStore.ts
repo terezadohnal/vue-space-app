@@ -59,7 +59,9 @@ export const useFlightStore = defineStore('flight', {
       };
       try {
         this.isLoading = true;
-        await axios.post(config.backendUrl + '/flight', data);
+        const response = await axios.post(config.backendUrl + '/flight', data);
+        const flightData = response.data;
+        this.addOrUpdateInStore(flightData.flight_id, flightData);
         this.error = null;
         this.isLoading = false;
       } catch (e) {
@@ -87,12 +89,13 @@ export const useFlightStore = defineStore('flight', {
       }
     },
 
-    async addPassagers(reservation_id, passagers) {
+    async addPassagers(reservation_id, user_id, passagers) {
       try {
         this.isLoading = true;
         const data = {
           reservation_id,
           passagers,
+          user_id,
         };
         const response = await axios.post(
           config.backendUrl + '/flight/reservation/passagers',
@@ -143,6 +146,19 @@ export const useFlightStore = defineStore('flight', {
           data
         );
         this.isLoading = true;
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+    async getFlightStatus(id) {
+      try {
+        this.isLoading = true;
+        const response = await axios.get(
+          config.backendUrl + '/flight/status/' + id
+        );
+        this.isLoading = false;
+        return response.data;
       } catch (e) {
         console.log(e);
       }

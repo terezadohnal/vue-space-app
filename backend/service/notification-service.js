@@ -12,7 +12,7 @@ class NotificationService {
 
   async getAll(user_id) {
     return await database().all(
-      'SELECT * FROM notifications WHERE user_id = ?',
+      'SELECT * FROM notifications WHERE user_id = ? ORDER BY notification_id DESC',
       user_id
     );
   }

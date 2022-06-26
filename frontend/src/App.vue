@@ -29,6 +29,7 @@
   <main>
     <router-view />
   </main>
+  <footer></footer>
 </template>
 
 <script>
@@ -55,6 +56,7 @@ export default {
   display: flex;
   justify-content: space-evenly;
   box-shadow: inset 5px #6768aa;
+  flex-wrap: wrap;
 }
 
 .nav .link {

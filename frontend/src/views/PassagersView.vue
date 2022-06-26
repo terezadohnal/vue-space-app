@@ -20,14 +20,14 @@ import { useUserStore } from '../stores/UserStore';
 import { mapStores } from 'pinia/dist/pinia';
 
 export default {
-  name: 'Reservation detail',
+  name: 'PassagersView',
   components: {
     PassagersForm,
     Headline,
   },
   data() {
     return {
-      text: 'Reservation Detail',
+      text: 'Passagers Detail',
       reservation: 0,
       numOfPassagers: 0,
     };

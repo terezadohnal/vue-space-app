@@ -1,34 +1,44 @@
 <template>
-  <div class="content">
-    <Error v-if="flightStore.loginMessage" :text="flightStore.error" />
-    <Headline text="FLIGHTS" />
+  <div class="background">
+    <div class="content">
+      <Error v-if="flightStore.loginMessage" :text="flightStore.error" />
+      <Headline text="FLIGHTS" />
 
-    <!-- <div v-if="this.userStore.user.role === 'technician'"> -->
-    <div>
-      <Action-button
-        text="Add new flight"
-        type="button"
-        :onClick="showForm"
-        :isDisabled="false"
-      />
-    </div>
-    <div v-if="isFormShown">
-      <NewFlightForm />
-    </div>
-    <!-- </div> -->
+      <div v-if="this.userStore.user.role === 'technician'">
+        <div>
+          <Action-button
+            :text="buttonTitle"
+            type="button"
+            :onClick="showForm"
+            :isDisabled="false"
+          />
+        </div>
+        <div v-if="isFormShown">
+          <NewFlightForm />
+        </div>
+      </div>
 
-    <div v-if="flightStore.isLoading">Loading flights...</div>
-    <div v-else-if="flightStore.flights.length === 0">No flights.</div>
-    <div class="flight-dashboard" v-else>
-      <div class="card" :key="flight.id" v-for="flight in flightStore.flights">
-        <div class="link">
-          <router-link
-            :to="{ name: 'flight-detail', params: { id: flight.flight_id } }"
-          >
-            <h3>Flight {{ flight.name }}</h3>
-            <p>Departure at: {{ flight.departure }}</p>
-            <p>Destination: {{ flight.destination }}</p>
-          </router-link>
+      <div v-if="flightStore.isLoading">Loading flights...</div>
+      <div v-else-if="flightStore.flights.length === 0">No flights.</div>
+      <div class="flight-dashboard" v-else>
+        <div
+          class="card"
+          :key="flight.id"
+          v-for="flight in flightStore.flights"
+        >
+          <div class="link">
+            <router-link
+              :to="{ name: 'flight-detail', params: { id: flight.flight_id } }"
+            >
+              <h3>Destination: {{ flight.destination }}</h3>
+              <p>
+                Departure at: <span>{{ flight.departure }}</span>
+              </p>
+              <p>
+                Name: <span>{{ flight.name }}</span>
+              </p>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -55,6 +65,9 @@ export default {
   },
   computed: {
     ...mapStores(useFlightStore, useUserStore),
+    buttonTitle() {
+      return this.isFormShown === true ? 'Cancel' : 'Add New Flight';
+    },
   },
   created() {
     this.flightStore.loadAll();
@@ -70,6 +83,17 @@ export default {
 </script>
 
 <style scoped>
+.background {
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.1),
+      rgba(0, 0, 255, 0.2)
+    ),
+    url('../img/stars.png');
+}
 .content {
   display: flex;
   flex-direction: column;
@@ -87,9 +111,11 @@ h1 {
 }
 
 .card {
-  border: 1px solid black;
+  border: 1px solid rgb(226, 226, 226);
   cursor: pointer;
   transition: 0.5s;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
 }
 
 .card:hover {
@@ -101,7 +127,17 @@ h1 {
 }
 
 h3 {
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
+  color: #cb97be;
+}
+
+p {
+  font-size: 16px;
+}
+
+span {
+  font-weight: 500;
 }
 
 .link a {
