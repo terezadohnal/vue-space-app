@@ -1,6 +1,6 @@
 <template>
   <Headline :text="this.text" />
-  <div class="infoBar">
+  <div v-if="this.flight" class="infoBar">
     <div class="barItem">
       <p>Status:</p>
       <p>{{ this.status }}</p>
@@ -8,7 +8,7 @@
 
     <div class="barItem">
       <p>Capacity:</p>
-      <p>{{ this.numOfPassagers }}/{{ this.flight.seats }}</p>
+      <p>{{ this.numOfPassagers + '/' + this.flight.seats }}</p>
     </div>
   </div>
   <div v-if="this.flight" class="content">
@@ -24,10 +24,7 @@
         <p><span>COMPANY:</span> {{ this.flight.company }}</p>
       </div>
       <div class="infoText">
-        <p><span>DATE:</span> {{ this.flight.date }}</p>
-      </div>
-      <div class="infoText">
-        <p><span>DEPARTURE:</span> {{ this.flight.departure }}</p>
+        <p><span>DEPARTURE:</span> {{ dateFormatter }}</p>
       </div>
       <div class="infoText">
         <p><span>DESTINATION:</span> {{ this.flight.destination }}</p>
@@ -92,6 +89,7 @@ import { useFlightStore } from '@/stores/FlightStore';
 import { useUserStore } from '@/stores/UserStore';
 import Headline from '../components/esentials/Headline.vue';
 import ActionButton from '../components/esentials/ActionButton.vue';
+import { format } from 'date-fns';
 
 export default {
   name: 'Flight detail',
@@ -131,6 +129,9 @@ export default {
     ButtonTitle() {
       return this.isFlightReserved ? 'Reserved' : 'Create Reservation';
     },
+    dateFormatter() {
+      return format(new Date(this.flight.departure), 'iii dd/MM/yy kk:mm');
+    },
   },
 
   methods: {
@@ -142,6 +143,7 @@ export default {
         );
         this.userStore.addReservation(response.reservation_id, response);
         this.flightStore.loadPassagers(this.id);
+        this.numOfPassagers++;
       } catch {
         this.flightStore.error = 'neco se pokazilo';
       }

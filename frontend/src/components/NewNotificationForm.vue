@@ -63,6 +63,7 @@ export default defineComponent({
           this.notification,
           this.userStore.user.id
         );
+        this.notificationStore.loadAll(this.userStore.user.id);
         this.resetForm();
       } catch (error) {
         console.log(error);

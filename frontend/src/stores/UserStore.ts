@@ -73,7 +73,6 @@ export const useUserStore = defineStore('user', {
           config.backendUrl + '/users/register',
           data
         );
-        this.error = null;
         this.isRegistering = false;
       } catch (e) {
         console.log(e);
@@ -106,7 +105,6 @@ export const useUserStore = defineStore('user', {
           config.backendUrl + '/flight/reservation/' + this.user.id
         );
         this.reservations = response.data;
-        this.error = null;
         this.isLoading = false;
       } catch (e) {
         console.log(e);
@@ -126,19 +124,13 @@ export const useUserStore = defineStore('user', {
     async deleteReservation(id, user_id) {
       try {
         this.isDeleting = true;
-        console.log(user_id);
-        // delete on server
         await axios.delete(config.backendUrl + '/flight/reservation/' + id, {
           data: { user_id },
         });
-
-        // delete locally
         const index = this.reservations.findIndex(
           (a) => a.reservation_id === id
         );
         this.reservations.splice(index, 1);
-
-        this.error = null;
         this.isDeleting = false;
       } catch (e) {
         console.log(e);

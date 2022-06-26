@@ -12,7 +12,7 @@ class NotificationService {
 
   async getAll(user_id) {
     return await database().all(
-      'SELECT * FROM notifications WHERE user_id = ? ORDER BY notification_id DESC',
+      'SELECT * FROM notifications JOIN users USING (user_id) WHERE user_id = ? OR role = "secretary" OR role = "technician" ORDER BY notification_id DESC',
       user_id
     );
   }

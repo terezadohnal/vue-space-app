@@ -43,7 +43,9 @@
           >
             <td colspan="4">{{ reservation.name }}</td>
             <td colspan="4">{{ reservation.destination }}</td>
-            <td colspan="5">{{ reservation.departure }}</td>
+            <td colspan="5">
+              {{ format(new Date(reservation.departure), 'dd/MM/yy kk:mm') }}
+            </td>
 
             <td colspan="8">
               <div class="buttons">
@@ -73,6 +75,7 @@ import { defineComponent } from 'vue';
 import { useUserStore } from '../stores/UserStore';
 import Headline from '../components/esentials/Headline.vue';
 import ActionButton from '../components/esentials/ActionButton.vue';
+import { format } from 'date-fns';
 
 export default defineComponent({
   name: 'User Profile',
@@ -80,6 +83,7 @@ export default defineComponent({
   data() {
     return {
       text: 'Profile',
+      format,
     };
   },
 

@@ -32,7 +32,10 @@
             >
               <h3>Destination: {{ flight.destination }}</h3>
               <p>
-                Departure at: <span>{{ flight.departure }}</span>
+                Departure at:
+                <span>{{
+                  format(new Date(flight.departure), 'dd/MM/yy kk:mm')
+                }}</span>
               </p>
               <p>
                 Name: <span>{{ flight.name }}</span>
@@ -53,6 +56,7 @@ import Error from '../components/esentials/Error.vue';
 import Headline from '../components/esentials/Headline.vue';
 import ActionButton from '../components/esentials/ActionButton.vue';
 import NewFlightForm from '../components/NewFlightForm.vue';
+import { format } from 'date-fns';
 
 export default {
   name: 'Flights',
@@ -61,6 +65,7 @@ export default {
     return {
       text: 'Flights',
       isFormShown: false,
+      format,
     };
   },
   computed: {
