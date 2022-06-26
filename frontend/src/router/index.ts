@@ -8,6 +8,7 @@ import LoginView from '../views/LoginView.vue';
 import PassagersView from '../views/PassagersView.vue';
 import EditFlightView from '../views/EditFlightView.vue';
 import NotificationsView from '../views/NotificationsView.vue';
+import ReservationView from '../views/ReservationsView.vue';
 import AuthSection from '../AuthSection.vue';
 import { useUserStore } from '../stores/UserStore';
 
@@ -64,6 +65,11 @@ const router = createRouter({
           path: '/notifications',
           name: 'notifications',
           component: NotificationsView,
+        },
+        {
+          path: '/reservation',
+          name: 'reservation',
+          component: ReservationView,
         },
       ],
     },

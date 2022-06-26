@@ -12,8 +12,11 @@
           >User</router-link
         >
       </div>
-      <div class="link">
+      <div v-if="userStore.isAuthenticated" class="link">
         <router-link :to="{ name: 'notifications' }">Notifications</router-link>
+      </div>
+      <div v-if="userStore.isAuthenticated" class="link">
+        <router-link :to="{ name: 'reservation' }">Reservations</router-link>
       </div>
       <div v-if="!userStore.isAuthenticated" class="link">
         <router-link :to="{ name: 'register' }">Register</router-link>
@@ -21,6 +24,7 @@
       <div v-if="!userStore.isAuthenticated" class="link">
         <router-link :to="{ name: 'login' }">Login</router-link>
       </div>
+
       <div v-else class="link">
         <router-link :to="{ name: 'home' }" @click="logout">Logout</router-link>
       </div>

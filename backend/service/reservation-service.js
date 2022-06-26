@@ -1,6 +1,12 @@
 const { database } = require('../database/database');
 
 class ReservationService {
+  async getAll() {
+    return await database().all(
+      'SELECT * FROM reservation JOIN flights USING (flight_id) JOIN users USING (user_id)'
+    );
+  }
+
   async getReservationsByUserId(user_id) {
     return await database().all(
       'SELECT * FROM reservation WHERE user_id = ?',

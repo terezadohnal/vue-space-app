@@ -136,5 +136,16 @@ export const useUserStore = defineStore('user', {
         console.log(e);
       }
     },
+
+    async getAllReservations() {
+      try {
+        const response = await axios.get(
+          config.backendUrl + '/flight/allReservations'
+        );
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      }
+    },
   },
 });

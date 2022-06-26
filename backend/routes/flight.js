@@ -1,4 +1,3 @@
-const { response } = require('express');
 const express = require('express');
 const router = express.Router();
 const flightService = require('../service/flight-service');
@@ -184,6 +183,7 @@ router.get('/reservation/passagersInFlight/:id', async (req, res) => {
 router.post('/status', async (req, res) => {
   const data = req.body;
   const status = await flightService.setFlightStatus(data);
+
   if (status) {
     res.status(201).json(status);
   } else {
@@ -193,10 +193,17 @@ router.post('/status', async (req, res) => {
 
 router.get('/status/:id', async (req, res) => {
   const id = parseInt(req.params.id);
-  console.log(id);
   const status = await flightService.getStatusById(id);
-  console.log(status);
   res.status(200).json(status);
+});
+
+router.get('/allReservations', async (req, res) => {
+  const reservations = await reservationService.getAll();
+  if (reservations) {
+    res.status(200).json(reservations);
+  } else {
+    res.status(400).send('Something went wrong');
+  }
 });
 
 module.exports = router;
