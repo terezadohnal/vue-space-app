@@ -176,7 +176,15 @@ export default {
 
     async getStatus(id) {
       const stat = await this.flightStore.getFlightStatus(id);
-      this.status = stat.flight_status_text;
+      if (stat.flight_status_text === 'To be departed') {
+        this.status = 'To be departed 🔜';
+      } else if (stat.flight_status_text === 'Departed') {
+        this.status = 'Departed 🛫';
+      } else if (stat.flight_status_text === 'In air') {
+        this.status = 'In air 🚀';
+      } else {
+        this.status = 'Arrived 🛬';
+      }
     },
   },
 };

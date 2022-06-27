@@ -15,7 +15,10 @@
       <div v-if="userStore.isAuthenticated" class="link">
         <router-link :to="{ name: 'notifications' }">Notifications</router-link>
       </div>
-      <div v-if="userStore.isAuthenticated" class="link">
+      <div
+        v-if="userStore.isAuthenticated && userStore.user.role === 'secretary'"
+        class="link"
+      >
         <router-link :to="{ name: 'reservation' }">Reservations</router-link>
       </div>
       <div v-if="!userStore.isAuthenticated" class="link">

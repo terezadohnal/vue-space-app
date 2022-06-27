@@ -8,7 +8,7 @@
         <div class="headline-caption">
           <p>Book your flight today!</p>
         </div>
-        <div>
+        <div class="button">
           <ActionButton
             :text="buttonTitle"
             :onClick="() => goTo()"
@@ -78,5 +78,9 @@ export default {
 
 .headline-caption p {
   font-size: 3em;
+}
+
+.button {
+  margin: 20px 0;
 }
 </style>
