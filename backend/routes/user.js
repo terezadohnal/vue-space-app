@@ -31,17 +31,17 @@ router.post('/register', async (req, res) => {
   };
 
   if (user) {
-    await notificationService.create(
-      'New user was successfully registered',
-      'success',
-      user.lastID
-    );
+    await notificationService.create({
+      user_id: user.lastID,
+      title: 'New user was successfully registered',
+      type: 'success',
+    });
   } else {
-    await notificationService.create(
-      'Something went wrong, dude',
-      'error',
-      user.lastID
-    );
+    await notificationService.create({
+      user_id: user.lastID,
+      title: 'Something went wrong, dude',
+      type: 'error',
+    });
   }
 
   res.status(201).send(response);

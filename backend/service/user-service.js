@@ -34,7 +34,7 @@ class UserService {
       user.nickname,
       user.email,
       password,
-      USER_ROLES.TECHNICIAN
+      USER_ROLES.CUSTOMER
     );
     return result;
   }

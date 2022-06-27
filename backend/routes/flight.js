@@ -22,7 +22,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const data = req.body;
-  console.log(data);
   if (
     data.name === undefined ||
     data.name?.trim() === '' ||

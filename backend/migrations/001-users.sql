@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS flights
     name VARCHAR(7),
     aircraft TEXT,
     company TEXT,
-    date DATE,
     departure TIMESTAMP,
     destination TEXT,
     seats INTEGER
