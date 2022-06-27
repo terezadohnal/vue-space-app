@@ -3,7 +3,7 @@ const { database } = require('../database/database');
 class ReservationService {
   async getAll() {
     return await database().all(
-      'SELECT * FROM reservation JOIN flights USING (flight_id) JOIN users USING (user_id)'
+      'SELECT * FROM reservation JOIN flights USING (flight_id) JOIN users USING (user_id) JOIN flight_status USING (flight_id)'
     );
   }
 

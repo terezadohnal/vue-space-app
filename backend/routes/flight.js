@@ -97,6 +97,11 @@ router.post('/reservation', async (req, res) => {
   res.status(201).json(reservation);
 });
 
+router.get('/reservations/all', async (req, res) => {
+  const reservations = await reservationService.getAll();
+  res.json(reservations);
+});
+
 router.get('/reservation/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const reservations = await reservationService.getReservedFlights(id);
@@ -195,15 +200,6 @@ router.get('/status/:id', async (req, res) => {
   const id = parseInt(req.params.id);
   const status = await flightService.getStatusById(id);
   res.status(200).json(status);
-});
-
-router.get('/allReservations', async (req, res) => {
-  const reservations = await reservationService.getAll();
-  if (reservations) {
-    res.status(200).json(reservations);
-  } else {
-    res.status(400).send('Something went wrong');
-  }
 });
 
 module.exports = router;

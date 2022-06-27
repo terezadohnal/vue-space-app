@@ -140,9 +140,9 @@ export const useUserStore = defineStore('user', {
     async getAllReservations() {
       try {
         const response = await axios.get(
-          config.backendUrl + '/flight/allReservations'
+          config.backendUrl + '/flight/reservations/all'
         );
-        console.log(response);
+        return response.data;
       } catch (e) {
         console.log(e);
       }
