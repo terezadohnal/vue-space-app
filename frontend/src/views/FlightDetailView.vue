@@ -29,6 +29,9 @@
       <div class="infoText">
         <p><span>DESTINATION:</span> {{ this.flight.destination }}</p>
       </div>
+      <div class="infoText">
+        <p><span>TO:</span> {{ this.flight.destination }}</p>
+      </div>
     </div>
     <div>
       <h3>Passagers</h3>

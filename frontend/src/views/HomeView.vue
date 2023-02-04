@@ -6,7 +6,7 @@
           <h1>Welcome to the land of astronauts</h1>
         </div>
         <div class="headline-caption">
-          <p>Book your flight today!</p>
+          <p>Book your flight today! You can fly to the moon with us</p>
         </div>
         <div class="button">
           <ActionButton

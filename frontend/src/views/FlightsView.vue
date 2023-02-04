@@ -38,7 +38,8 @@
                 }}</span>
               </p>
               <p>
-                Name: <span>{{ flight.name }}</span>
+                Name: <span>{{ flight.name }}</span> Name:
+                <span>{{ flight.name }}</span>
               </p>
             </router-link>
           </div>
